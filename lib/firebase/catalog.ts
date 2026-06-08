@@ -1,5 +1,5 @@
 import { unstable_cache } from "next/cache"
-import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
 import { sampleBrands, sampleCategories, sampleSettings, sampleTestimonials } from "@/lib/firebase/sample-data"
 import type { Brand, Category, SiteSettings, Testimonial } from "@/types"

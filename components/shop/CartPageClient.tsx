@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { useCart } from "@/hooks/useCart"
+import { cartStorageKey } from "@/lib/context/CartContext"
 import { buildWhatsAppUrl } from "@/lib/utils/whatsapp"
 import { formatPrice } from "@/lib/utils/format"
 import { logInquiry } from "@/lib/firebase/inquiries"
@@ -25,8 +26,9 @@ export function CartPageClient({ products, whatsappNumber }: { products: Seriali
       logInquiry(productIds, "cart"),
       new Promise((resolve) => setTimeout(resolve, 350))
     ])
-    window.location.href = buildWhatsAppUrl(expandedProducts, whatsappNumber)
     clearCart()
+    window.localStorage.removeItem(cartStorageKey)
+    window.location.href = buildWhatsAppUrl(expandedProducts, whatsappNumber)
   }
 
   if (!selected.length) {

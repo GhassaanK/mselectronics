@@ -1,6 +1,6 @@
 "use client"
 
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc } from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
 import type { SiteSettings } from "@/types"
 

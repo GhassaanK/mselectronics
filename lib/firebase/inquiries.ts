@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore"
+import { addDoc, collection, serverTimestamp } from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
 
 export async function logInquiry(productIds: string[], sourcePage: string) {

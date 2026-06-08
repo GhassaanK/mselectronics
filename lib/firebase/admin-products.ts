@@ -1,6 +1,6 @@
 "use client"
 
-import { addDoc, collection, deleteDoc, doc, serverTimestamp, setDoc } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, serverTimestamp, setDoc } from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
 import type { ProductAvailability, ProductBadge, ProductImage } from "@/types"
 

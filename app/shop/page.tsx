@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { ShopFilters } from "@/components/shop/ShopFilters"
 import { SectionHeader } from "@/components/shared/SectionHeader"
 import { getBrands, getCategories } from "@/lib/firebase/catalog"
@@ -17,7 +18,9 @@ export default async function ShopPage() {
   return (
     <section className="container-page py-2xl">
       <SectionHeader title="Browse appliances" description="Search and filter products, then add your shortlisted items to a WhatsApp inquiry." />
-      <ShopFilters products={serializeProducts(products)} categories={categories} brands={brands} />
+      <Suspense fallback={<div className="container-page py-2xl text-muted">Loading shop filters...</div>}>
+        <ShopFilters products={serializeProducts(products)} categories={categories} brands={brands} />
+      </Suspense>
     </section>
   )
 }

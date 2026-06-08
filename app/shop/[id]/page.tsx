@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { CldImage } from "next-cloudinary"
 import { Card } from "@/components/ui/card"
 import { ProductActions } from "@/components/shop/ProductActions"
 import { ProductGrid } from "@/components/shop/ProductGrid"
+import { CloudinaryImage } from "@/components/shared/CloudinaryImage"
 import { getSiteSettings } from "@/lib/firebase/catalog"
 import { getProductById, getProductsByCategory } from "@/lib/firebase/products"
 import { formatPrice } from "@/lib/utils/format"
@@ -47,7 +47,7 @@ export default async function ProductPage({ params }: Props) {
       <div className="grid gap-xl lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-xl bg-surface p-lg">
           <div className="relative aspect-square">
-            <CldImage src={image.publicId} alt={image.alt} fill priority sizes="(min-width: 1024px) 55vw, 100vw" className="object-contain" />
+            <CloudinaryImage src={image.publicId} alt={image.alt} fill priority sizes="(min-width: 1024px) 55vw, 100vw" className="object-contain" />
           </div>
         </div>
         <aside className="lg:sticky lg:top-24 lg:self-start">
