@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 240 100% 55%;
+  --accent: 14 100% 50%;
+  --background: 0 0% 100%;
+  --surface: 225 38% 98%;
+  --foreground: 240 44% 8%;
+  --muted: 220 9% 46%;
+  --border: 220 13% 91%;
+  --card: 0 0% 100%;
+  --gradient-primary: linear-gradient(135deg, #1a1aff 0%, #3b5bff 100%);
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --shadow-soft: 0 12px 30px rgb(10 10 26 / 0.08);
+  --shadow-lift: 0 22px 60px rgb(10 10 26 / 0.14);
+  --duration-premium: 220ms;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.container-page {
+  width: min(1180px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.heading-tight {
+  font-weight: 700;
+  letter-spacing: 0;
+}
