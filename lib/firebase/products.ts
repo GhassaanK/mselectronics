@@ -28,13 +28,23 @@ export async function getProductById(id: string) {
 
 export async function getProductsByCategory(category: string) {
   if (!canUseFirestore()) return sampleProducts.filter((product) => product.category === category && product.availability !== "Out of Stock")
-  const snapshot = await getDocs(query(collection(db!, "products"), where("category", "==", category), where("availability", "!=", "Out of Stock")))
+  const snapshot = await getDocs(query(
+    collection(db!, "products"),
+    where("category", "==", category),
+    where("availability", "!=", "Out of Stock"),
+    orderBy("availability")
+  ))
   return snapshot.docs.map((item) => serializeProduct(item.id, item.data()))
 }
 
 export async function getProductsByBrand(brand: string) {
   if (!canUseFirestore()) return sampleProducts.filter((product) => product.brand === brand && product.availability !== "Out of Stock")
-  const snapshot = await getDocs(query(collection(db!, "products"), where("brand", "==", brand), where("availability", "!=", "Out of Stock")))
+  const snapshot = await getDocs(query(
+    collection(db!, "products"),
+    where("brand", "==", brand),
+    where("availability", "!=", "Out of Stock"),
+    orderBy("availability")
+  ))
   return snapshot.docs.map((item) => serializeProduct(item.id, item.data()))
 }
 

@@ -12,7 +12,7 @@ import type { SerializableProduct } from "@/types"
 
 export function ProductCard({ product }: { product: SerializableProduct }) {
   const { addItem } = useCart()
-  const image = product.images[0]
+  const image = product.images?.[0] ?? { publicId: "samples/ecommerce/analog-classic", alt: product.name }
 
   return (
     <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>

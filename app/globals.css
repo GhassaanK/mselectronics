@@ -1,53 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+  ── Core palette ──────────────────────────────────────────
+  These are the BASE defaults. ThemeProvider (injected in
+  layout.tsx before first paint) will override --navy,
+  --blue, --blue-light, and --accent when a custom theme
+  is saved in Firebase. All other tokens derive from those.
+*/
 :root {
-  --primary: 240 100% 55%;
-  --accent: 14 100% 50%;
-  --background: 0 0% 100%;
-  --surface: 225 38% 98%;
-  --foreground: 240 44% 8%;
-  --muted: 220 9% 46%;
-  --border: 220 13% 91%;
-  --card: 0 0% 100%;
-  --gradient-primary: linear-gradient(135deg, #1a1aff 0%, #3b5bff 100%);
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
+  --navy:          10 15 30;       /* #0A0F1E — overridable */
+  --off-white:     247 248 252;    /* #F7F8FC */
+  --blue:          28 78 216;      /* #1C4ED8 — overridable */
+  --blue-light:    59 130 246;     /* #3B82F6 — overridable */
+  --red:           239 68 68;      /* #EF4444 */
+  --accent:        239 68 68;      /* #EF4444 — overridable */
+  --slate:         148 163 184;    /* #94A3B8 */
+  --white:         255 255 255;
+
+  /* Semantic tokens — derive from overridable primitives */
+  --background:    var(--off-white);
+  --foreground:    var(--navy);
+  --primary:       var(--blue);
+  --muted:         var(--slate);
+  --border:        220 13% 91%;
+  --card:          var(--white);
+  --surface:       247 248 252;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 24px rgb(10 15 30 / 0.07);
+  --shadow-lift: 0 16px 48px rgb(10 15 30 / 0.14);
+  --shadow-glow: 0 0 60px rgb(var(--blue) / 0.25);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+
+  /* Radii */
+  --radius-sm:  0.5rem;
+  --radius-md:  0.875rem;
+  --radius-lg:  1.25rem;
+  --radius-xl:  1.75rem;
+  --radius-2xl: 2.5rem;
+
+  /* Spacing scale */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
   --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  --space-4xl: 6rem;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --shadow-soft: 0 12px 30px rgb(10 10 26 / 0.08);
-  --shadow-lift: 0 22px 60px rgb(10 10 26 / 0.14);
-  --duration-premium: 220ms;
+  --space-3xl: 5rem;
+  --space-4xl: 7rem;
 }
 
-* {
+/* ── Reset & Base ───────────────────────────────────────── */
+*, *::before, *::after {
   border-color: hsl(var(--border));
+  box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background: rgb(var(--background));
+  color: rgb(var(--navy));
+  font-family: 'Inter', sans-serif;
 }
 
+::selection {
+  background: rgb(var(--blue) / 0.15);
+  color: rgb(var(--navy));
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+.font-display {
+  font-family: 'Sora', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ── Layout Utilities ───────────────────────────────────── */
 .container-page {
-  width: min(1180px, calc(100% - 2rem));
+  width: min(1200px, calc(100% - 2.5rem));
   margin-inline: auto;
 }
 
-.heading-tight {
+.section-py {
+  padding-block: var(--space-4xl);
+}
+
+.section-py-sm {
+  padding-block: var(--space-3xl);
+}
+
+/* ── Component Tokens ───────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: rgb(var(--blue));
+  color: white;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: 999px;
+  transition: all var(--duration-base) var(--ease-out-expo);
+  box-shadow: 0 4px 20px rgb(var(--blue) / 0.35);
+}
+
+.btn-primary:hover {
+  background: rgb(var(--blue-light));
+  box-shadow: 0 8px 30px rgb(var(--blue) / 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  color: rgb(var(--navy));
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: 999px;
+  border: 1.5px solid hsl(var(--border));
+  transition: all var(--duration-base) var(--ease-out-expo);
+}
+
+.btn-ghost:hover {
+  border-color: rgb(var(--blue));
+  color: rgb(var(--blue));
+  background: rgb(var(--blue) / 0.05);
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: #25D366;
+  color: white;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: 999px;
+  transition: all var(--duration-base) var(--ease-out-expo);
+  box-shadow: 0 4px 20px rgb(37 211 102 / 0.3);
+}
+
+.btn-whatsapp:hover {
+  background: #1fb855;
+  box-shadow: 0 8px 30px rgb(37 211 102 / 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Card ───────────────────────────────────────────────── */
+.card-base {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-soft);
+  transition: all var(--duration-base) var(--ease-out-expo);
+}
+
+.card-base:hover {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-3px);
+}
+
+/* ── Eyebrow label ──────────────────────────────────────── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(var(--blue));
+}
+
+/* ── Gradient backgrounds ───────────────────────────────── */
+.bg-hero {
+  background: rgb(var(--navy));
+}
+
+.bg-section-alt {
+  background: rgb(var(--off-white));
+}
+
+/* ── Animated pulse glow ────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+.hero-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* ── Ticker / marquee ───────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ── Navbar scroll state ────────────────────────────────── */
+.navbar-scrolled {
+  background: rgb(var(--navy) / 0.97) !important;
+  border-bottom-color: rgb(255 255 255 / 0.08) !important;
+  box-shadow: 0 4px 30px rgb(0 0 0 / 0.3);
+}
+
+/* ── Misc ───────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

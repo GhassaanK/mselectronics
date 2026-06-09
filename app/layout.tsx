@@ -5,7 +5,9 @@ import "./globals.css"
 import { Footer } from "@/components/layout/Footer"
 import { Navbar } from "@/components/layout/Navbar"
 import { CartProvider } from "@/lib/context/CartContext"
+import { ThemeProvider } from "@/components/shared/ThemeProvider"
 import { brandConfig } from "@/config/brand"
+import { getTheme } from "@/lib/firebase/theme"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
@@ -13,7 +15,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(brandConfig.siteUrl),
   title: {
     default: "MS Electronics | Premium Appliances",
-    template: "%s | MS Electronics"
+    template: "%s | MS Electronics",
   },
   description: brandConfig.companyDescription,
   openGraph: {
@@ -21,30 +23,43 @@ export const metadata: Metadata = {
     description: brandConfig.companyDescription,
     url: brandConfig.siteUrl,
     siteName: "MS Electronics",
-    type: "website"
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "MS Electronics",
-    description: brandConfig.companyDescription
+    description: brandConfig.companyDescription,
   },
-  alternates: { canonical: "/" }
+  alternates: { canonical: "/" },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Fetch theme server-side → zero layout shift, no client Firestore call
+  const theme = await getTheme()
+
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: brandConfig.companyName,
     url: brandConfig.siteUrl,
     logo: `${brandConfig.siteUrl}${brandConfig.logo}`,
-    contactPoint: { "@type": "ContactPoint", telephone: brandConfig.contactInfo.phone, contactType: "sales" }
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: brandConfig.contactInfo.phone,
+      contactType: "sales",
+    },
   }
 
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <Script id="organization-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
+        {/* Inject theme CSS vars before first paint */}
+        <ThemeProvider theme={theme} />
+        <Script
+          id="organization-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
         <CartProvider>
           <Navbar />
           <main>{children}</main>
