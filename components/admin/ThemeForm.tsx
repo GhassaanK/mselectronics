@@ -33,90 +33,11 @@ type Props = {
 }
 
 export function ThemeForm({ initialTheme }: Props) {
-  const [colors, setColors] = useState<ThemeColors>(initialTheme)
-  const [status, setStatus] = useState("")
-
-  function setColor(key: keyof ThemeColors, hex: string) {
-    setColors((prev) => ({ ...prev, [key]: hexToRgb(hex) }))
-  }
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-    try {
-      setStatus("Saving...")
-      await updateTheme(colors)
-      // Apply to current page immediately
-      const root = document.documentElement
-      root.style.setProperty("--navy",       colors.navy)
-      root.style.setProperty("--blue",       colors.blue)
-      root.style.setProperty("--blue-light", colors.blueLight)
-      root.style.setProperty("--accent",     colors.accent)
-      setStatus("Theme saved. Changes are live.")
-    } catch (e) {
-      setStatus(e instanceof Error ? e.message : "Error saving theme.")
-    }
-  }
-
-  async function handleReset() {
-    setColors(defaultTheme)
-    try {
-      setStatus("Resetting...")
-      await updateTheme(defaultTheme)
-      const root = document.documentElement
-      root.style.setProperty("--navy",       defaultTheme.navy)
-      root.style.setProperty("--blue",       defaultTheme.blue)
-      root.style.setProperty("--blue-light", defaultTheme.blueLight)
-      root.style.setProperty("--accent",     defaultTheme.accent)
-      setStatus("Reset to defaults.")
-    } catch (e) {
-      setStatus(e instanceof Error ? e.message : "Error resetting.")
-    }
-  }
-
+  // Theme editing is disabled — return a read-only notice so admins can't change site colors.
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {COLOR_FIELDS.map(({ key, label, description }) => (
-          <Card key={key} className="flex items-center gap-4 p-4">
-            {/* Color swatch / picker */}
-            <label className="relative cursor-pointer">
-              <div
-                className="h-11 w-11 rounded-lg border border-border shadow-sm transition-transform hover:scale-105"
-                style={{ background: `rgb(${colors[key]})` }}
-              />
-              <input
-                type="color"
-                value={rgbToHex(colors[key])}
-                onChange={(e) => setColor(key, e.target.value)}
-                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-              />
-            </label>
-
-            <div className="min-w-0">
-              <p className="text-sm font-semibold">{label}</p>
-              <p className="text-xs text-muted">{description}</p>
-              <p className="mt-0.5 font-mono text-xs text-muted">{rgbToHex(colors[key])}</p>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* Preview strip */}
-      <div className="mt-4 overflow-hidden rounded-lg border">
-        <div className="flex h-10 items-center justify-between px-4" style={{ background: `rgb(${colors.navy})` }}>
-          <span className="text-xs font-semibold text-white/60" style={{ fontFamily: "'Sora', sans-serif" }}>Preview</span>
-          <div className="flex items-center gap-2">
-            <span className="rounded-full px-3 py-1 text-xs font-semibold text-white" style={{ background: `rgb(${colors.blue})` }}>Button</span>
-            <span className="rounded-full px-2 py-0.5 text-xs font-bold text-white" style={{ background: `rgb(${colors.accent})` }}>3</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        <Button type="submit" size="sm">Save Theme</Button>
-        <Button type="button" size="sm" variant="outline" onClick={handleReset}>Reset to Default</Button>
-        {status && <p className="text-xs text-muted">{status}</p>}
-      </div>
-    </form>
+    <Card className="p-5">
+      <h3 className="font-semibold">Theme Locked</h3>
+      <p className="mt-2 text-sm text-muted">Site theme is fixed and cannot be changed from the admin panel.</p>
+    </Card>
   )
 }

@@ -31,8 +31,29 @@ function canUse() {
 
 export async function getBanners(): Promise<Banner[]> {
   if (!canUse()) return []
-  const snap = await getDocs(query(collection(db!, "banners"), orderBy("order", "asc")))
-  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Banner, "id">) }))
+
+  const snap = await getDocs(
+    query(
+      collection(db!, "banners"),
+      orderBy("order", "asc")
+    )
+  )
+
+  return snap.docs.map((d) => {
+    const data = d.data()
+
+    return {
+      id: d.id,
+      imageUrl: data.imageUrl ?? "",
+      imagePublicId: data.imagePublicId,
+      headline: data.headline,
+      subheadline: data.subheadline,
+      ctaLabel: data.ctaLabel,
+      ctaHref: data.ctaHref,
+      order: data.order ?? 0,
+      active: data.active ?? true,
+    }
+  })
 }
 
 export async function createBanner(input: BannerInput) {

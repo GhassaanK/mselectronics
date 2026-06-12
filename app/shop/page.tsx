@@ -24,34 +24,28 @@ export default async function ShopPage() {
     <div>
 
       {/* ── Page hero band ──────────────────────────────── */}
-      <div className="bg-[#0A0F1E] pb-12 pt-14">
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-10 pt-12">
         <div className="container-page">
-          <p
-            className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-400"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
             MS Electronics
           </p>
-          <h1
-            className="text-3xl font-extrabold text-white md:text-4xl"
-            style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-          >
+          <h1 className="text-3xl font-bold text-[#111111] md:text-4xl">
             Browse Appliances
           </h1>
-          <p className="mt-3 max-w-xl text-base text-white/50">
+          <p className="mt-2 max-w-xl text-sm text-[#666666]">
             Search, filter by category or brand, then shortlist items for a WhatsApp inquiry.
           </p>
 
           {/* Stat pills */}
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <span className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/60">
-              <SlidersHorizontal size={12} className="text-blue-400" />
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-2 rounded border border-[#E5E5E5] bg-white px-3 py-1.5 text-xs font-medium text-[#525252]">
+              <SlidersHorizontal size={12} className="text-[#AAAAAA]" />
               {products.length} products available
             </span>
-            <span className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/60">
+            <span className="flex items-center gap-2 rounded border border-[#E5E5E5] bg-white px-3 py-1.5 text-xs font-medium text-[#525252]">
               {categories.length} categories
             </span>
-            <span className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/60">
+            <span className="flex items-center gap-2 rounded border border-[#E5E5E5] bg-white px-3 py-1.5 text-xs font-medium text-[#525252]">
               {brands.length} brands
             </span>
           </div>
@@ -59,11 +53,11 @@ export default async function ShopPage() {
       </div>
 
       {/* ── Filters + product grid ──────────────────────── */}
-      <div className="bg-[#F7F8FC]">
+      <div className="bg-white">
         <div className="container-page py-10">
           <Suspense
             fallback={
-              <div className="flex items-center justify-center py-24 text-sm text-slate-400">
+              <div className="flex items-center justify-center py-24 text-sm text-[#AAAAAA]">
                 Loading products...
               </div>
             }

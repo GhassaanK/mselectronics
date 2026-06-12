@@ -1,8 +1,23 @@
 "use client"
 
-import { addDoc, collection, deleteDoc, doc, serverTimestamp, setDoc } from "firebase/firestore/lite"
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  setDoc,
+  where,
+} from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
-import type { ProductAvailability, ProductBadge, ProductImage } from "@/types"
+import type {
+  ProductAvailability,
+  ProductBadge,
+  ProductImage,
+} from "@/types"
 
 export type AdminProductInput = {
   name: string
@@ -18,24 +33,111 @@ export type AdminProductInput = {
   badge?: ProductBadge
 }
 
-export async function createProduct(input: AdminProductInput) {
-  if (!firebaseEnabled || !db) throw new Error("Firebase is not configured.")
-  return addDoc(collection(db, "products"), {
-    ...input,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
-  })
+async function recalculateCategoryCount(categoryName: string) {
+  if (!firebaseEnabled || !db) return
+
+  const productsSnap = await getDocs(
+    query(
+      collection(db, "products"),
+      where("category", "==", categoryName)
+    )
+  )
+
+  const categoriesSnap = await getDocs(
+    query(
+      collection(db, "categories"),
+      where("name", "==", categoryName)
+    )
+  )
+
+  if (categoriesSnap.empty) return
+
+  const categoryDoc = categoriesSnap.docs[0]
+
+  await setDoc(
+    doc(db, "categories", categoryDoc.id),
+    {
+      productCount: productsSnap.size,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  )
 }
 
-export async function updateProduct(id: string, input: AdminProductInput) {
-  if (!firebaseEnabled || !db) throw new Error("Firebase is not configured.")
-  return setDoc(doc(db, "products", id), {
-    ...input,
-    updatedAt: serverTimestamp()
-  }, { merge: true })
+export async function createProduct(input: AdminProductInput) {
+  if (!firebaseEnabled || !db) {
+    throw new Error("Firebase is not configured.")
+  }
+
+  const ref = await addDoc(
+    collection(db, "products"),
+    {
+      ...input,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    }
+  )
+
+  await recalculateCategoryCount(input.category)
+
+  return ref
+}
+
+export async function updateProduct(
+  id: string,
+  input: AdminProductInput
+) {
+  if (!firebaseEnabled || !db) {
+    throw new Error("Firebase is not configured.")
+  }
+
+  const existing = await getDoc(
+    doc(db, "products", id)
+  )
+
+  const previousCategory =
+    existing.exists()
+      ? (existing.data().category as string | undefined)
+      : undefined
+
+  await setDoc(
+    doc(db, "products", id),
+    {
+      ...input,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  )
+
+  await recalculateCategoryCount(input.category)
+
+  if (
+    previousCategory &&
+    previousCategory !== input.category
+  ) {
+    await recalculateCategoryCount(previousCategory)
+  }
 }
 
 export async function deleteProduct(id: string) {
-  if (!firebaseEnabled || !db) throw new Error("Firebase is not configured.")
-  return deleteDoc(doc(db, "products", id))
+  if (!firebaseEnabled || !db) {
+    throw new Error("Firebase is not configured.")
+  }
+
+  const existing = await getDoc(
+    doc(db, "products", id)
+  )
+
+  const category =
+    existing.exists()
+      ? (existing.data().category as string | undefined)
+      : undefined
+
+  await deleteDoc(
+    doc(db, "products", id)
+  )
+
+  if (category) {
+    await recalculateCategoryCount(category)
+  }
 }

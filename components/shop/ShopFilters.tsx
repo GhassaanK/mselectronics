@@ -56,7 +56,7 @@ export function ShopFilters({ products, categories, brands }: { products: Serial
 
   return (
     <div className="grid gap-xl lg:grid-cols-[260px_1fr]">
-      <aside className="hidden rounded-lg bg-surface p-lg lg:block">{filterPanel}</aside>
+      <aside className="hidden rounded-lg bg-white/80 dark:bg-zinc-900/80 border p-lg lg:block">{filterPanel}</aside>
       <div className="grid gap-lg">
         <div className="flex gap-sm">
           <div className="relative flex-1">

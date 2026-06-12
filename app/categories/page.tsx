@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Zap } from "lucide-react"
-import { Reveal, StaggerChild, StaggerParent } from "@/components/shared/Motion"
+import { ArrowRight } from "lucide-react"
+import { StaggerChild, StaggerParent } from "@/components/shared/Motion"
 import { getCategories } from "@/lib/firebase/catalog"
 
 export const metadata: Metadata = {
@@ -14,54 +15,86 @@ export default async function CategoriesPage() {
 
   return (
     <div>
-
-      {/* ── Page hero ─────────────────────────────────────── */}
-      <div className="bg-[#0A0F1E] pb-12 pt-14">
+      {/* Hero */}
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-10 pt-12">
         <div className="container-page">
-          <p
-            className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-400"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
             MS Electronics
           </p>
-          <h1
-            className="text-3xl font-extrabold text-white md:text-4xl"
-            style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-          >
+
+          <h1 className="text-3xl font-bold text-[#111111] md:text-4xl">
             All Categories
           </h1>
-          <p className="mt-3 max-w-xl text-base text-white/50">
-            Browse ACs, refrigerators, TVs, kitchen appliances, and more — all in one place.
+
+          <p className="mt-2 max-w-xl text-sm text-[#666666]">
+            Browse ACs, refrigerators, TVs, kitchen appliances, and more —
+            all in one place.
           </p>
         </div>
       </div>
 
-      {/* ── Grid ──────────────────────────────────────────── */}
-      <div className="bg-[#F7F8FC]">
-        <div className="container-page py-14">
+      {/* Categories */}
+      <div className="bg-white">
+        <div className="container-page py-12">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
+                Shop By Category
+              </p>
+
+              <h2 className="mt-2 text-2xl font-bold text-[#111111]">
+                Explore Product Categories
+              </h2>
+            </div>
+
+            <div className="hidden text-sm text-[#666666] md:block">
+              {categories.length} Categories
+            </div>
+          </div>
+
           <StaggerParent className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {categories.map((category) => (
               <StaggerChild key={category.id}>
                 <Link
                   href={`/shop?category=${category.slug}`}
-                  className="group flex flex-col gap-4 rounded-2xl border border-[#E8ECF4] bg-white p-6 shadow-[0_2px_12px_rgb(10,15,30,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_8px_30px_rgb(28,78,216,0.12)]"
+                  className="group overflow-hidden rounded-2xl border border-[#E8ECF4] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)]"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F0F4FF] text-blue-600 transition-all duration-250 group-hover:bg-blue-600 group-hover:text-white">
-                    <Zap size={20} />
+                  {/* Category Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#F8F8F8]">
+                    {category.imageUrl ? (
+                      <Image
+                        src={category.imageUrl}
+                        alt={category.name}
+                        fill
+                        sizes="(max-width:768px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center bg-[#F8F8F8]">
+                        <span className="text-sm text-[#AAAAAA]">
+                          No Image
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <h2
-                      className="text-sm font-bold text-[#0A0F1E]"
-                      style={{ fontFamily: "'Sora', sans-serif" }}
-                    >
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <h2 className="text-sm font-bold text-[#111111]">
                       {category.name}
                     </h2>
-                    <p className="mt-1 text-xs text-slate-400">
+
+                    <p className="mt-1 text-xs text-[#999999]">
                       {category.productCount} products
                     </p>
-                  </div>
-                  <div className="mt-auto flex items-center gap-1 text-xs font-semibold text-blue-600 opacity-0 transition-opacity group-hover:opacity-100">
-                    Shop now <ArrowRight size={12} />
+
+                    <div className="mt-3 flex items-center gap-1 text-xs font-medium text-blue-600 opacity-0 transition-all duration-300 group-hover:opacity-100">
+                      Shop now
+                      <ArrowRight
+                        size={12}
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                      />
+                    </div>
                   </div>
                 </Link>
               </StaggerChild>
@@ -69,7 +102,6 @@ export default async function CategoriesPage() {
           </StaggerParent>
         </div>
       </div>
-
     </div>
   )
 }

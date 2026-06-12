@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { StaggerChild, StaggerParent } from "@/components/shared/Motion"
 import { getBrands } from "@/lib/firebase/catalog"
@@ -11,96 +12,83 @@ export const metadata: Metadata = {
 
 export default async function BrandsPage() {
   const brands = await getBrands()
-  const featured = brands.filter((b) => b.featured)
-  const rest     = brands.filter((b) => !b.featured)
 
   return (
     <div>
-
-      {/* ── Page hero ─────────────────────────────────────── */}
-      <div className="bg-[#0A0F1E] pb-12 pt-14">
+      {/* Hero */}
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-10 pt-12">
         <div className="container-page">
-          <p
-            className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-400"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
             MS Electronics
           </p>
-          <h1
-            className="text-3xl font-extrabold text-white md:text-4xl"
-            style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-          >
+
+          <h1 className="text-3xl font-bold text-[#111111] md:text-4xl">
             Brands We Carry
           </h1>
-          <p className="mt-3 max-w-xl text-base text-white/50">
+
+          <p className="mt-2 max-w-xl text-sm text-[#666666]">
             Every brand is sourced through official channels. No grey market.
           </p>
         </div>
       </div>
 
-      <div className="bg-[#F7F8FC]">
-        <div className="container-page py-14 space-y-14">
-
-          {/* Featured brands */}
-          {featured.length > 0 && (
+      {/* Brands Grid */}
+      <div className="bg-white">
+        <div className="container-page py-12">
+          <div className="mb-8 flex items-center justify-between">
             <div>
-              <p
-                className="mb-6 text-xs font-bold uppercase tracking-[0.12em] text-blue-600"
-                style={{ fontFamily: "'Sora', sans-serif" }}
-              >
-                Featured Brands
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
+                Trusted Brands
               </p>
-              <StaggerParent className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                {featured.map((brand) => (
-                  <StaggerChild key={brand.id}>
-                    <Link
-                      href={`/shop?brand=${brand.slug}`}
-                      className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-[#E8ECF4] bg-white px-4 py-8 shadow-[0_2px_12px_rgb(10,15,30,0.06)] transition-all duration-250 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_8px_30px_rgb(28,78,216,0.12)]"
-                    >
-                      <span
-                        className="text-xl font-extrabold tracking-tight text-[#0A0F1E] transition-colors group-hover:text-blue-600"
-                        style={{ fontFamily: "'Sora', sans-serif" }}
-                      >
+
+              <h2 className="mt-2 text-2xl font-bold text-[#111111]">
+                Official Brand Partners
+              </h2>
+            </div>
+
+            <div className="hidden text-sm text-[#666666] md:block">
+              {brands.length} Brands Available
+            </div>
+          </div>
+
+          <StaggerParent className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+            {brands.map((brand) => (
+              <StaggerChild key={brand.id}>
+                <Link
+                  href={`/shop?brand=${brand.slug}`}
+                  className="group flex h-[150px] flex-col items-center justify-center rounded-2xl border border-[#E8ECF4] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)]"
+                >
+                  {brand.logoUrl ? (
+                    <div className="relative mb-3 h-16 w-full">
+                      <Image
+                        src={brand.logoUrl}
+                        alt={brand.name}
+                        fill
+                        sizes="200px"
+                        className="object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="mb-3 flex h-16 items-center justify-center">
+                      <span className="text-lg font-bold text-[#111111]">
                         {brand.name}
                       </span>
-                      <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 opacity-0 transition-all group-hover:text-blue-500 group-hover:opacity-100">
-                        View products <ArrowRight size={11} />
-                      </span>
-                    </Link>
-                  </StaggerChild>
-                ))}
-              </StaggerParent>
-            </div>
-          )}
+                    </div>
+                  )}
 
-          {/* All brands */}
-          {rest.length > 0 && (
-            <div>
-              <p
-                className="mb-6 text-xs font-bold uppercase tracking-[0.12em] text-slate-400"
-                style={{ fontFamily: "'Sora', sans-serif" }}
-              >
-                All Brands
-              </p>
-              <StaggerParent className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
-                {rest.map((brand) => (
-                  <StaggerChild key={brand.id}>
-                    <Link
-                      href={`/shop?brand=${brand.slug}`}
-                      className="group flex items-center justify-center rounded-xl border border-[#E8ECF4] bg-white px-4 py-5 text-sm font-bold text-slate-500 shadow-[0_1px_6px_rgb(10,15,30,0.05)] transition-all duration-200 hover:border-blue-200 hover:text-blue-600 hover:shadow-[0_4px_20px_rgb(28,78,216,0.1)]"
-                      style={{ fontFamily: "'Sora', sans-serif" }}
-                    >
-                      {brand.name}
-                    </Link>
-                  </StaggerChild>
-                ))}
-              </StaggerParent>
-            </div>
-          )}
-
+                  <div className="flex items-center gap-1 text-xs font-medium text-[#666666] transition-colors group-hover:text-blue-600">
+                    <span>{brand.name}</span>
+                    <ArrowRight
+                      size={11}
+                      className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
+                    />
+                  </div>
+                </Link>
+              </StaggerChild>
+            ))}
+          </StaggerParent>
         </div>
       </div>
-
     </div>
   )
 }

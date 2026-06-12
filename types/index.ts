@@ -5,8 +5,15 @@ export type ProductImage = {
   alt: string
 }
 
-export type ProductAvailability = "In Stock" | "Out of Stock" | "On Order"
-export type ProductBadge = "Best Seller" | "New Arrival" | "On Sale"
+export type ProductAvailability =
+  | "In Stock"
+  | "Out of Stock"
+  | "On Order"
+
+export type ProductBadge =
+  | "Best Seller"
+  | "New Arrival"
+  | "On Sale"
 
 export type Product = {
   id: string
@@ -25,7 +32,10 @@ export type Product = {
   updatedAt: Timestamp
 }
 
-export type SerializableProduct = Omit<Product, "createdAt" | "updatedAt"> & {
+export type SerializableProduct = Omit<
+  Product,
+  "createdAt" | "updatedAt"
+> & {
   createdAt: number
   updatedAt: number
 }
@@ -34,7 +44,14 @@ export type Category = {
   id: string
   name: string
   slug: string
-  icon: string
+
+  // legacy
+  icon?: string
+
+  // new
+  imageUrl?: string
+  imagePublicId?: string
+
   productCount: number
 }
 
@@ -42,7 +59,10 @@ export type Brand = {
   id: string
   name: string
   slug: string
-  logoUrl: string
+
+  logoUrl?: string
+  logoPublicId?: string
+
   featured: boolean
   displayOrder: number
 }
@@ -56,7 +76,10 @@ export type Testimonial = {
   createdAt: Timestamp
 }
 
-export type SerializableTestimonial = Omit<Testimonial, "createdAt"> & {
+export type SerializableTestimonial = Omit<
+  Testimonial,
+  "createdAt"
+> & {
   createdAt: number
 }
 

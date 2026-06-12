@@ -23,7 +23,7 @@ export function Navbar() {
   const [open, setOpen]         = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
+    const onScroll = () => setScrolled(window.scrollY > 8)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
@@ -39,12 +39,11 @@ export function Navbar() {
     <>
       <header
         className={[
-          "sticky top-0 z-50 transition-all duration-300",
+          "sticky top-0 z-50 bg-white transition-all duration-200",
           scrolled
-            ? "border-b border-white/8 shadow-[0_4px_30px_rgb(0,0,0,0.3)] backdrop-blur-xl"
-            : "border-b border-white/10 backdrop-blur-sm",
+            ? "border-b border-gray-100 shadow-[0_2px_12px_rgb(0,0,0,0.06)]"
+            : "border-b border-gray-100",
         ].join(" ")}
-        style={{ background: `rgb(var(--navy) / ${scrolled ? "0.97" : "1"})` }}
       >
         <div className="container-page flex h-[68px] items-center justify-between gap-4">
 
@@ -57,17 +56,17 @@ export function Navbar() {
                 width={180}
                 height={44}
                 priority
-                className="h-9 w-auto brightness-0 invert"
+                className="h-9 w-auto"
               />
             ) : (
-              <span className="font-display text-lg font-extrabold text-white">
+              <span className="text-xl font-extrabold tracking-tight text-[#111111]">
                 {brandConfig.companyName}
               </span>
             )}
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-0.5 md:flex">
             {nav.map((item) => {
               const active = pathname === item.href
               return (
@@ -75,18 +74,15 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={[
-                    "relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200",
+                    "relative px-4 py-2 text-sm font-medium rounded transition-colors duration-150",
                     active
-                      ? "text-white bg-white/10"
-                      : "text-white/60 hover:text-white hover:bg-white/8",
+                      ? "text-[#111111] font-semibold"
+                      : "text-[#525252] hover:text-[#111111]",
                   ].join(" ")}
                 >
                   {item.label}
                   {active && (
-                    <span
-                      className="absolute bottom-0.5 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full"
-                      style={{ background: "rgb(var(--blue-light))" }}
-                    />
+                    <span className="absolute bottom-0 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-[#111111]" />
                   )}
                 </Link>
               )
@@ -94,12 +90,12 @@ export function Navbar() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
 
             <Link
               href="/shop"
               aria-label="Search products"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition-all duration-200 hover:bg-white/10 hover:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded text-[#525252] transition-colors hover:bg-gray-100 hover:text-[#111111]"
             >
               <Search size={18} />
             </Link>
@@ -107,20 +103,12 @@ export function Navbar() {
             <Link
               href="/cart"
               aria-label="Inquiry cart"
-              className="relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
-              style={{
-                background: "rgb(var(--blue))",
-                boxShadow: "0 4px 16px rgb(var(--blue) / 0.4)",
-                fontFamily: "'Sora', sans-serif",
-              }}
+              className="relative flex items-center gap-2 rounded px-3 py-2 text-sm font-semibold text-[#111111] transition-colors hover:bg-gray-100"
             >
-              <ShoppingBag size={16} />
+              <ShoppingBag size={18} />
               <span className="hidden sm:inline">Inquiry</span>
               {count > 0 && (
-                <span
-                  className="flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-bold text-white"
-                  style={{ background: "rgb(var(--accent))" }}
-                >
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#DC2626] px-1 text-xs font-bold text-white">
                   {count}
                 </span>
               )}
@@ -129,7 +117,7 @@ export function Navbar() {
             <button
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition-all hover:bg-white/10 hover:text-white md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded text-[#525252] transition-colors hover:bg-gray-100 hover:text-[#111111] md:hidden"
             >
               <Menu size={20} />
             </button>
@@ -142,32 +130,31 @@ export function Navbar() {
       <div
         onClick={() => setOpen(false)}
         className={[
-          "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden",
+          "fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity duration-200 md:hidden",
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
         ].join(" ")}
       />
 
       <div
         className={[
-          "fixed inset-y-0 right-0 z-50 flex w-80 flex-col transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden",
+          "fixed inset-y-0 right-0 z-50 flex w-72 flex-col bg-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden",
           open ? "translate-x-0" : "translate-x-full",
         ].join(" ")}
-        style={{ background: "rgb(var(--navy))" }}
       >
-        <div className="flex h-[68px] items-center justify-between border-b border-white/10 px-6">
-          <span className="font-display text-sm font-semibold uppercase tracking-widest text-white/50">
+        <div className="flex h-[68px] items-center justify-between border-b border-gray-100 px-5">
+          <span className="text-sm font-semibold uppercase tracking-widest text-gray-400">
             Menu
           </span>
           <button
             onClick={() => setOpen(false)}
             aria-label="Close menu"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+            className="flex h-8 w-8 items-center justify-center rounded text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        <nav className="flex flex-col gap-1 p-4">
+        <nav className="flex flex-col gap-0.5 p-3">
           {nav.map((item) => {
             const active = pathname === item.href
             return (
@@ -175,10 +162,11 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={[
-                  "flex items-center rounded-xl px-4 py-3.5 text-base font-medium transition-all duration-200",
-                  active ? "text-white" : "text-white/60 hover:bg-white/8 hover:text-white",
+                  "flex items-center rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-150",
+                  active
+                    ? "bg-gray-100 text-[#111111] font-semibold"
+                    : "text-[#525252] hover:bg-gray-50 hover:text-[#111111]",
                 ].join(" ")}
-                style={active ? { background: "rgb(var(--blue) / 0.2)", fontFamily: "'Sora', sans-serif" } : { fontFamily: "'Sora', sans-serif" }}
               >
                 {item.label}
               </Link>
@@ -186,11 +174,10 @@ export function Navbar() {
           })}
         </nav>
 
-        <div className="mt-auto border-t border-white/10 p-6">
+        <div className="mt-auto border-t border-gray-100 p-5">
           <Link
             href="/cart"
-            className="flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-            style={{ background: "rgb(var(--blue))", boxShadow: "0 4px 16px rgb(var(--blue) / 0.4)", fontFamily: "'Sora', sans-serif" }}
+            className="flex items-center justify-center gap-2 rounded-lg bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#262626]"
           >
             <ShoppingBag size={16} />
             View Inquiry Cart {count > 0 && `(${count})`}

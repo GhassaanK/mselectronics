@@ -6,10 +6,9 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { Banner } from "@/lib/firebase/banners"
 
-// ── Placeholder banners used when no banners in DB ────────────────────────────
 export const PLACEHOLDER_BANNERS: Omit<Banner, "id">[] = [
   {
-    imageUrl: "",           // empty = show gradient placeholder
+    imageUrl: "",
     headline: "Premium Appliances",
     subheadline: "Discover the best in home electronics, delivered to your door in Karachi.",
     ctaLabel: "Shop Now",
@@ -20,7 +19,7 @@ export const PLACEHOLDER_BANNERS: Omit<Banner, "id">[] = [
   {
     imageUrl: "",
     headline: "New Arrivals",
-    subheadline: "The latest models from top brands — explore what's just landed.",
+    subheadline: "The latest models from top brands — explore what just landed.",
     ctaLabel: "See New Arrivals",
     ctaHref: "/shop",
     order: 1,
@@ -48,13 +47,12 @@ export function HeroBannerSlider({ banners }: Props) {
     setTimeout(() => {
       setCurrent(index)
       setTransitioning(false)
-    }, 350)
+    }, 300)
   }, [transitioning])
 
   const next = useCallback(() => goTo((current + 1) % slides.length), [current, goTo, slides.length])
   const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo, slides.length])
 
-  // Autoplay
   useEffect(() => {
     if (slides.length <= 1) return
     timerRef.current = setTimeout(next, 5500)
@@ -65,13 +63,14 @@ export function HeroBannerSlider({ banners }: Props) {
 
   return (
     <section
-      className="relative h-[90vh] min-h-[560px] max-h-[820px] overflow-hidden"
+      className="relative overflow-hidden bg-[#F0EFED]"
+      style={{ height: "min(88vh, 720px)", minHeight: "460px" }}
       aria-label="Hero banner"
     >
-      {/* ── Background ──────────────────────────────────── */}
+      {/* ── Background image or gradient placeholder ──── */}
       <div
         className={[
-          "absolute inset-0 transition-opacity duration-700",
+          "absolute inset-0 transition-opacity duration-500",
           transitioning ? "opacity-0" : "opacity-100",
         ].join(" ")}
       >
@@ -84,89 +83,79 @@ export function HeroBannerSlider({ banners }: Props) {
             className="object-cover object-center"
           />
         ) : (
-          /* Gradient placeholder */
-          <div className="absolute inset-0 bg-[rgb(var(--navy))]">
-            {/* Decorative glows */}
-            <div className="absolute left-1/4 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--blue)/0.18)] blur-[120px]" />
-            <div className="absolute right-1/4 bottom-1/3 h-[400px] w-[400px] rounded-full bg-[rgb(var(--accent)/0.10)] blur-[100px]" />
-            {/* Grid pattern */}
-            <div
-              className="absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage: "linear-gradient(rgb(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgb(255,255,255,0.5) 1px, transparent 1px)",
-                backgroundSize: "60px 60px",
-              }}
-            />
-          </div>
+          /* Placeholder: clean light gradient */
+          <div className="absolute inset-0 bg-gradient-to-br from-[#EEEDED] via-[#E8E7E5] to-[#D8D7D5]" />
         )}
-
-        {/* Overlay gradient — always, ensures text legibility over images */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--navy)/0.85)] via-[rgb(var(--navy)/0.45)] to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy)/0.60)] via-transparent to-transparent" />
+        {/* Very subtle left vignette for text readability only when image present */}
+        {slide.imageUrl && (
+          <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/20 to-transparent" />
+        )}
       </div>
 
       {/* ── Content ─────────────────────────────────────── */}
       <div className="container-page relative z-10 flex h-full flex-col justify-center">
         <div
           className={[
-            "max-w-2xl transition-all duration-500",
-            transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0",
+            "max-w-lg transition-all duration-400",
+            transitioning ? "opacity-0 translate-y-3" : "opacity-100 translate-y-0",
           ].join(" ")}
         >
           {/* Eyebrow */}
-          <div className="eyebrow mb-4">
-            <span className="h-px w-6 bg-[rgb(var(--blue))]" />
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#888888]">
             MS Electronics
-          </div>
+          </p>
 
           {/* Headline */}
           {slide.headline && (
-            <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-[#111111] sm:text-5xl lg:text-[3.25rem]">
               {slide.headline}
             </h1>
           )}
 
+          {/* Divider line — matches Super Asia style */}
+          <div className="mt-5 h-px w-10 bg-[#999999]" />
+
           {/* Subheadline */}
           {slide.subheadline && (
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
+            <p className="mt-4 text-sm text-[#666666] sm:text-base">
               {slide.subheadline}
             </p>
           )}
 
           {/* CTA */}
           {slide.ctaLabel && slide.ctaHref && (
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link href={slide.ctaHref} className="btn-primary">
+            <div className="mt-7">
+              <Link
+                href={slide.ctaHref}
+                className="inline-flex items-center gap-2 rounded bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#333333]"
+              >
                 {slide.ctaLabel}
-              </Link>
-              <Link href="/contact" className="btn-ghost border-white/20 text-white hover:border-white/40 hover:bg-white/10 hover:text-white">
-                Contact Us
               </Link>
             </div>
           )}
         </div>
       </div>
 
-      {/* ── Arrows (only if multiple slides) ────────────── */}
+      {/* ── Arrows ──────────────────────────────────────── */}
       {slides.length > 1 && (
         <>
           <button
             onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-4 top-1/2 z-20 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-sm transition-all hover:bg-white/20"
+            className="absolute left-4 top-1/2 z-20 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-[#CCCCCC] bg-white/80 text-[#525252] backdrop-blur-sm transition hover:bg-white hover:text-[#111111]"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
           <button
             onClick={next}
             aria-label="Next slide"
-            className="absolute right-4 top-1/2 z-20 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-sm transition-all hover:bg-white/20"
+            className="absolute right-4 top-1/2 z-20 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-[#CCCCCC] bg-white/80 text-[#525252] backdrop-blur-sm transition hover:bg-white hover:text-[#111111]"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
 
           {/* Dot indicators */}
-          <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+          <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
             {slides.map((_, i) => (
               <button
                 key={i}
@@ -175,20 +164,13 @@ export function HeroBannerSlider({ banners }: Props) {
                 className={[
                   "h-1.5 rounded-full transition-all duration-300",
                   i === current
-                    ? "w-8 bg-white"
-                    : "w-2 bg-white/40 hover:bg-white/70",
+                    ? "w-6 bg-[#111111]"
+                    : "w-2 bg-[#AAAAAA] hover:bg-[#777777]",
                 ].join(" ")}
               />
             ))}
           </div>
         </>
-      )}
-
-      {/* ── Slide counter (bottom right) ─────────────────── */}
-      {slides.length > 1 && (
-        <div className="absolute bottom-8 right-6 z-20 font-display text-xs font-semibold text-white/40 tabular-nums">
-          {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
-        </div>
       )}
     </section>
   )

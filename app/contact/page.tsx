@@ -11,42 +11,11 @@ export const metadata: Metadata = {
 }
 
 const contactItems = [
-  {
-    icon: MapPin,
-    label: "Visit Us",
-    value: brandConfig.contactInfo.address,
-    color: "blue",
-    action: null,
-  },
-  {
-    icon: Phone,
-    label: "Call Us",
-    value: brandConfig.contactInfo.phone,
-    color: "emerald",
-    action: `tel:${brandConfig.contactInfo.phone}`,
-  },
-  {
-    icon: Mail,
-    label: "Email Us",
-    value: brandConfig.contactInfo.email,
-    color: "purple",
-    action: `mailto:${brandConfig.contactInfo.email}`,
-  },
-  {
-    icon: Clock,
-    label: "Business Hours",
-    value: "Mon – Sat, 10 AM – 8 PM",
-    color: "orange",
-    action: null,
-  },
+  { icon: MapPin,  label: "Visit Us",       value: brandConfig.contactInfo.address,            color: "bg-[#F8F8F8] text-[#525252]", action: null },
+  { icon: Phone,   label: "Call Us",        value: brandConfig.contactInfo.phone,               color: "bg-[#F8F8F8] text-[#525252]", action: `tel:${brandConfig.contactInfo.phone}` },
+  { icon: Mail,    label: "Email Us",       value: brandConfig.contactInfo.email,               color: "bg-[#F8F8F8] text-[#525252]", action: `mailto:${brandConfig.contactInfo.email}` },
+  { icon: Clock,   label: "Business Hours", value: "Mon – Sat, 10 AM – 8 PM",                  color: "bg-[#F8F8F8] text-[#525252]", action: null },
 ]
-
-const colorMap: Record<string, string> = {
-  blue:    "bg-blue-50 text-blue-600",
-  emerald: "bg-emerald-50 text-emerald-600",
-  purple:  "bg-purple-50 text-purple-600",
-  orange:  "bg-orange-50 text-orange-600",
-}
 
 export default function ContactPage() {
   const whatsappUrl = buildWhatsAppUrl([], brandConfig.whatsappNumber)
@@ -55,25 +24,19 @@ export default function ContactPage() {
     <div>
 
       {/* ── Page hero ─────────────────────────────────────── */}
-      <div className="bg-[#0A0F1E] pb-14 pt-14">
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-12 pt-12">
         <div className="container-page max-w-2xl">
-          <p
-            className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-400"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
             Get in Touch
           </p>
-          <h1
-            className="text-3xl font-extrabold text-white md:text-5xl"
-            style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-          >
+          <h1 className="text-3xl font-bold text-[#111111] md:text-4xl">
             Contact MS Electronics
           </h1>
-          <p className="mt-4 text-lg leading-relaxed text-white/50">
+          <p className="mt-3 text-sm leading-relaxed text-[#666666] md:text-base">
             Questions about availability, warranty, delivery, or installments?
             We&apos;re a WhatsApp message away.
           </p>
-          <div className="mt-8">
+          <div className="mt-6">
             <WhatsAppButton
               href={whatsappUrl}
               label="Message us on WhatsApp"
@@ -84,31 +47,23 @@ export default function ContactPage() {
       </div>
 
       {/* ── Contact cards ─────────────────────────────────── */}
-      <div className="bg-[#F7F8FC]">
-        <div className="container-page py-14">
+      <div className="bg-white">
+        <div className="container-page py-12">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {contactItems.map(({ icon: Icon, label, value, color, action }, i) => (
               <Reveal key={label} delay={i * 0.07}>
-                <div className="flex flex-col gap-4 rounded-2xl border border-[#E8ECF4] bg-white p-6 shadow-[0_2px_12px_rgb(10,15,30,0.06)]">
-                  <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${colorMap[color]}`}>
-                    <Icon size={20} />
+                <div className="flex flex-col gap-3 rounded-xl border border-[#E5E5E5] bg-[#F8F8F8] p-5">
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg border border-[#E5E5E5] bg-white ${color}`}>
+                    <Icon size={18} />
                   </div>
                   <div>
-                    <p
-                      className="text-xs font-bold uppercase tracking-widest text-slate-400"
-                      style={{ fontFamily: "'Sora', sans-serif" }}
-                    >
-                      {label}
-                    </p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#AAAAAA]">{label}</p>
                     {action ? (
-                      <a
-                        href={action}
-                        className="mt-1.5 block text-sm font-medium text-[#0A0F1E] transition-colors hover:text-blue-600"
-                      >
+                      <a href={action} className="mt-1 block text-sm font-medium text-[#111111] transition-colors hover:text-[#525252]">
                         {value}
                       </a>
                     ) : (
-                      <p className="mt-1.5 text-sm font-medium text-[#0A0F1E]">{value}</p>
+                      <p className="mt-1 text-sm font-medium text-[#111111]">{value}</p>
                     )}
                   </div>
                 </div>
@@ -119,20 +74,17 @@ export default function ContactPage() {
       </div>
 
       {/* ── WhatsApp CTA band ─────────────────────────────── */}
-      <div className="bg-[#0A0F1E]">
-        <div className="container-page py-16">
+      <div className="border-t border-[#E5E5E5] bg-[#F8F8F8]">
+        <div className="container-page py-14">
           <Reveal>
-            <div className="flex flex-col items-center gap-5 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366]/15">
-                <MessageCircle size={28} className="text-[#25D366]" />
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[#E5E5E5] bg-white">
+                <MessageCircle size={24} className="text-[#25D366]" />
               </div>
-              <h2
-                className="text-2xl font-extrabold text-white md:text-3xl"
-                style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-              >
+              <h2 className="text-2xl font-bold text-[#111111] md:text-3xl">
                 The fastest way to reach us
               </h2>
-              <p className="max-w-md text-base text-white/50">
+              <p className="max-w-md text-sm text-[#666666]">
                 Skip the form. Drop us a message on WhatsApp and our team responds quickly — usually within the hour.
               </p>
               <WhatsAppButton

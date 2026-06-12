@@ -14,27 +14,18 @@ const values = [
     icon: BadgeCheck,
     title: "Authorised Only",
     desc: "We only stock what we can stand behind. Every product comes through official distribution — no grey market, ever.",
-    color: "blue",
   },
   {
     icon: HeartHandshake,
     title: "Honest Guidance",
     desc: "We'd rather lose a sale than recommend something that isn't right. Clear advice is the only kind we give.",
-    color: "emerald",
   },
   {
     icon: ShieldCheck,
     title: "Full Warranty Support",
     desc: "When something goes wrong, we don't disappear. We help you navigate manufacturer warranty from start to finish.",
-    color: "purple",
   },
 ]
-
-const colorMap: Record<string, string> = {
-  blue:    "bg-blue-50 text-blue-600",
-  emerald: "bg-emerald-50 text-emerald-600",
-  purple:  "bg-purple-50 text-purple-600",
-}
 
 const stats = [
   { value: "500+", label: "Products in stock" },
@@ -48,48 +39,27 @@ export default function AboutPage() {
     <div>
 
       {/* ── Hero ──────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-[#0A0F1E] pb-20 pt-20">
-        {/* Decorative glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-24 left-1/3 h-[400px] w-[400px] -translate-x-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(28,78,216,0.22) 0%, transparent 68%)" }}
-        />
-
-        <div className="container-page relative">
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-14 pt-12">
+        <div className="container-page">
           <Reveal>
-            <p
-              className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blue-400"
-              style={{ fontFamily: "'Sora', sans-serif" }}
-            >
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
               Our Story
             </p>
-            <h1
-              className="max-w-2xl text-4xl font-extrabold leading-tight text-white md:text-5xl"
-              style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-            >
+            <h1 className="max-w-2xl text-4xl font-bold text-[#111111] md:text-5xl">
               {brandConfig.companyName}
             </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/55">
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#666666] md:text-base">
               {brandConfig.companyDescription}
             </p>
           </Reveal>
 
           {/* Stats row */}
-          <Reveal delay={0.15}>
-            <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <Reveal delay={0.12}>
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {stats.map(({ value, label }) => (
-                <div
-                  key={label}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-5 py-5"
-                >
-                  <p
-                    className="text-2xl font-extrabold text-white"
-                    style={{ fontFamily: "'Sora', sans-serif" }}
-                  >
-                    {value}
-                  </p>
-                  <p className="mt-1 text-xs text-white/45">{label}</p>
+                <div key={label} className="rounded-xl border border-[#E5E5E5] bg-white px-5 py-5">
+                  <p className="text-2xl font-extrabold text-[#111111]">{value}</p>
+                  <p className="mt-1 text-xs text-[#AAAAAA]">{label}</p>
                 </div>
               ))}
             </div>
@@ -99,23 +69,17 @@ export default function AboutPage() {
 
       {/* ── Story section ─────────────────────────────────── */}
       <div className="bg-white">
-        <div className="container-page py-16">
+        <div className="container-page py-14">
           <div className="mx-auto max-w-2xl">
             <Reveal>
-              <span
-                className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-600"
-                style={{ fontFamily: "'Sora', sans-serif" }}
-              >
-                <span className="h-px w-6 bg-blue-600" />
+              <span className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
+                <span className="h-px w-5 bg-[#CCCCCC]" />
                 What We Believe
               </span>
-              <h2
-                className="text-2xl font-extrabold text-[#0A0F1E] md:text-3xl"
-                style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-              >
+              <h2 className="text-2xl font-bold text-[#111111] md:text-3xl">
                 Buying an appliance should feel good.
               </h2>
-              <div className="mt-5 space-y-4 text-base leading-relaxed text-slate-500">
+              <div className="mt-4 space-y-4 text-sm leading-relaxed text-[#525252] md:text-base">
                 <p>
                   Too many people end up with the wrong appliance — bought on hype, sold by someone who just wanted the commission. We started MS Electronics because we wanted to do it differently.
                 </p>
@@ -132,41 +96,28 @@ export default function AboutPage() {
       </div>
 
       {/* ── Values ────────────────────────────────────────── */}
-      <div className="bg-[#F7F8FC]">
-        <div className="container-page py-16">
+      <div className="bg-[#F8F8F8]">
+        <div className="container-page py-14">
           <Reveal>
-            <div className="mb-10 space-y-2">
-              <span
-                className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-blue-600"
-                style={{ fontFamily: "'Sora', sans-serif" }}
-              >
-                <span className="h-px w-6 bg-blue-600" />
+            <div className="mb-8 space-y-1">
+              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
+                <span className="h-px w-5 bg-[#CCCCCC]" />
                 Our Values
               </span>
-              <h2
-                className="text-2xl font-extrabold text-[#0A0F1E] md:text-3xl"
-                style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-              >
-                How we work
-              </h2>
+              <h2 className="text-2xl font-bold text-[#111111] md:text-3xl">How we work</h2>
             </div>
           </Reveal>
 
-          <StaggerParent className="grid gap-5 md:grid-cols-3">
-            {values.map(({ icon: Icon, title, desc, color }) => (
+          <StaggerParent className="grid gap-4 md:grid-cols-3">
+            {values.map(({ icon: Icon, title, desc }) => (
               <StaggerChild key={title}>
-                <div className="flex flex-col gap-4 rounded-2xl border border-[#E8ECF4] bg-white p-6 shadow-[0_2px_12px_rgb(10,15,30,0.06)]">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorMap[color]}`}>
-                    <Icon size={22} />
+                <div className="flex flex-col gap-4 rounded-xl border border-[#E5E5E5] bg-white p-6">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#E5E5E5] bg-[#F8F8F8] text-[#525252]">
+                    <Icon size={20} />
                   </div>
                   <div>
-                    <h3
-                      className="mb-2 text-base font-bold text-[#0A0F1E]"
-                      style={{ fontFamily: "'Sora', sans-serif" }}
-                    >
-                      {title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-500">{desc}</p>
+                    <h3 className="mb-1.5 text-sm font-bold text-[#111111]">{title}</h3>
+                    <p className="text-sm leading-relaxed text-[#666666]">{desc}</p>
                   </div>
                 </div>
               </StaggerChild>
@@ -176,29 +127,22 @@ export default function AboutPage() {
       </div>
 
       {/* ── CTA ───────────────────────────────────────────── */}
-      <div className="bg-[#0A0F1E]">
-        <div className="container-page py-16">
+      <div className="border-t border-[#E5E5E5] bg-[#F8F8F8]">
+        <div className="container-page py-14">
           <Reveal>
-            <div className="flex flex-col items-center gap-5 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600/20">
-                <Zap size={24} className="text-blue-400" />
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#E5E5E5] bg-white">
+                <Zap size={20} className="text-[#525252]" />
               </div>
-              <h2
-                className="text-2xl font-extrabold text-white md:text-3xl"
-                style={{ fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}
-              >
+              <h2 className="text-2xl font-bold text-[#111111] md:text-3xl">
                 Ready to find the right appliance?
               </h2>
-              <p className="max-w-md text-base text-white/50">
+              <p className="max-w-md text-sm text-[#666666]">
                 Browse our full catalogue or start a WhatsApp conversation and we&apos;ll guide you from there.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Link href="/shop" className="btn-primary">
-                  Browse Products
-                </Link>
-                <Link href="/contact" className="btn-ghost" style={{ color: "rgba(255,255,255,0.7)", borderColor: "rgba(255,255,255,0.15)" }}>
-                  Contact Us
-                </Link>
+                <Link href="/shop" className="btn-primary">Browse Products</Link>
+                <Link href="/contact" className="btn-ghost">Contact Us</Link>
               </div>
             </div>
           </Reveal>

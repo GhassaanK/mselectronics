@@ -3,20 +3,96 @@ import type { Brand, Category, Product, SiteSettings, Testimonial } from "@/type
 const now = { seconds: 0, nanoseconds: 0, toDate: () => new Date(), toMillis: () => 0, isEqual: () => true } as never
 
 export const sampleCategories: Category[] = [
-  { id: "air-conditioners", name: "Air Conditioners", slug: "air-conditioners", icon: "snowflake", productCount: 24 },
-  { id: "refrigerators", name: "Refrigerators", slug: "refrigerators", icon: "refrigerator", productCount: 18 },
-  { id: "washing-machines", name: "Washing Machines", slug: "washing-machines", icon: "washing-machine", productCount: 14 },
-  { id: "led-tvs", name: "LED TVs", slug: "led-tvs", icon: "tv", productCount: 12 },
-  { id: "kitchen-appliances", name: "Kitchen Appliances", slug: "kitchen-appliances", icon: "blender", productCount: 31 },
-  { id: "fans", name: "Fans", slug: "fans", icon: "fan", productCount: 20 }
+  {
+    id: "air-conditioners",
+    name: "Air Conditioners",
+    slug: "air-conditioners",
+    imagePublicId: "",
+    imageUrl: "",
+  },
+  {
+    id: "refrigerators",
+    name: "Refrigerators",
+    slug: "refrigerators",
+    imagePublicId: "",
+    imageUrl: "",
+  },
+  {
+    id: "washing-machines",
+    name: "Washing Machines",
+    slug: "washing-machines",
+    imagePublicId: "",
+    imageUrl: "",
+  },
+  {
+    id: "led-tvs",
+    name: "LED TVs",
+    slug: "led-tvs",
+    imagePublicId: "",
+    imageUrl: "",
+  },
+  {
+    id: "kitchen-appliances",
+    name: "Kitchen Appliances",
+    slug: "kitchen-appliances",
+    imagePublicId: "",
+    imageUrl: "",
+  },
+  {
+    id: "fans",
+    name: "Fans",
+    slug: "fans",
+    imagePublicId: "",
+    imageUrl: "",
+  },
 ]
 
 export const sampleBrands: Brand[] = [
-  { id: "haier", name: "Haier", slug: "haier", logoUrl: "", featured: true, displayOrder: 1 },
-  { id: "dawlance", name: "Dawlance", slug: "dawlance", logoUrl: "", featured: true, displayOrder: 2 },
-  { id: "samsung", name: "Samsung", slug: "samsung", logoUrl: "", featured: true, displayOrder: 3 },
-  { id: "lg", name: "LG", slug: "lg", logoUrl: "", featured: true, displayOrder: 4 },
-  { id: "orient", name: "Orient", slug: "orient", logoUrl: "", featured: false, displayOrder: 5 }
+  {
+    id: "haier",
+    name: "Haier",
+    slug: "haier",
+    logoPublicId: "",
+    logoUrl: "",
+    featured: true,
+    displayOrder: 1,
+  },
+  {
+    id: "dawlance",
+    name: "Dawlance",
+    slug: "dawlance",
+    logoPublicId: "",
+    logoUrl: "",
+    featured: true,
+    displayOrder: 2,
+  },
+  {
+    id: "samsung",
+    name: "Samsung",
+    slug: "samsung",
+    logoPublicId: "",
+    logoUrl: "",
+    featured: true,
+    displayOrder: 3,
+  },
+  {
+    id: "lg",
+    name: "LG",
+    slug: "lg",
+    logoPublicId: "",
+    logoUrl: "",
+    featured: true,
+    displayOrder: 4,
+  },
+  {
+    id: "orient",
+    name: "Orient",
+    slug: "orient",
+    logoPublicId: "",
+    logoUrl: "",
+    featured: false,
+    displayOrder: 5,
+  },
 ]
 
 export const sampleProducts: Product[] = [

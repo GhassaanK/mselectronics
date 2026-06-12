@@ -2,14 +2,19 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
+
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar"
 import { Footer } from "@/components/layout/Footer"
 import { Navbar } from "@/components/layout/Navbar"
 import { CartProvider } from "@/lib/context/CartContext"
 import { ThemeProvider } from "@/components/shared/ThemeProvider"
 import { brandConfig } from "@/config/brand"
-import { getTheme } from "@/lib/firebase/theme"
+import { defaultTheme } from "@/lib/firebase/theme"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(brandConfig.siteUrl),
@@ -30,13 +35,16 @@ export const metadata: Metadata = {
     title: "MS Electronics",
     description: brandConfig.companyDescription,
   },
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+  },
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Fetch theme server-side → zero layout shift, no client Firestore call
-  const theme = await getTheme()
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -53,14 +61,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
-        {/* Inject theme CSS vars before first paint */}
-        <ThemeProvider theme={theme} />
+        <ThemeProvider theme={defaultTheme} />
+
         <Script
           id="organization-jsonld"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(orgJsonLd),
+          }}
         />
+
         <CartProvider>
+          <AnnouncementBar />
           <Navbar />
           <main>{children}</main>
           <Footer />
