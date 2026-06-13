@@ -24,7 +24,7 @@ import { serializeProducts } from "@/lib/utils/serialize"
 import { buildWhatsAppUrl } from "@/lib/utils/whatsapp"
 import type { Category } from "@/types"
 
-export const revalidate = 3600
+export const revalidate = 30
 
 
 const trustItems = [

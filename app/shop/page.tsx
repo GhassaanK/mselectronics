@@ -6,7 +6,7 @@ import { getBrands, getCategories } from "@/lib/firebase/catalog"
 import { getProducts } from "@/lib/firebase/products"
 import { serializeProducts } from "@/lib/utils/serialize"
 
-export const revalidate = 3600
+export const revalidate = 30
 
 export const metadata: Metadata = {
   title: "Shop Appliances",
