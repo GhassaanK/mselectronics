@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore/lite"
+import { collection, doc, getDoc, getDocs, orderBy, query, Timestamp } from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
 import {
   sampleBrands,
@@ -17,6 +17,19 @@ function canUseFirestore() {
   return firebaseEnabled && Boolean(db)
 }
 
+function serializeTimestamps<T extends Record<string, unknown>>(data: T): T {
+  const result: Record<string, unknown> = {}
+  for (const key in data) {
+    const val = data[key]
+    if (val instanceof Timestamp) {
+      result[key] = val.toDate().toISOString()
+    } else {
+      result[key] = val
+    }
+  }
+  return result as T
+}
+
 export async function getCategories(): Promise<Category[]> {
   if (!canUseFirestore()) return sampleCategories
 
@@ -29,7 +42,7 @@ export async function getCategories(): Promise<Category[]> {
 
   return snapshot.docs.map((item) => ({
     id: item.id,
-    ...(item.data() as Omit<Category, "id">),
+    ...serializeTimestamps(item.data() as Omit<Category, "id">),
   }))
 }
 
@@ -45,7 +58,7 @@ export async function getBrands(): Promise<Brand[]> {
 
   return snapshot.docs.map((item) => ({
     id: item.id,
-    ...(item.data() as Omit<Brand, "id">),
+    ...serializeTimestamps(item.data() as Omit<Brand, "id">),
   }))
 }
 
@@ -61,7 +74,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 
   return snapshot.docs.map((item) => ({
     id: item.id,
-    ...(item.data() as Omit<Testimonial, "id">),
+    ...serializeTimestamps(item.data() as Omit<Testimonial, "id">),
   }))
 }
 
@@ -73,6 +86,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   )
 
   return snapshot.exists()
-    ? (snapshot.data() as SiteSettings)
+    ? serializeTimestamps(snapshot.data() as SiteSettings)
     : sampleSettings
 }

@@ -5,6 +5,8 @@ import { getSiteSettings } from "@/lib/firebase/catalog"
 import { getProducts } from "@/lib/firebase/products"
 import { serializeProducts } from "@/lib/utils/serialize"
 
+export const revalidate = 30
+
 export const metadata: Metadata = { title: "Inquiry Cart", alternates: { canonical: "/cart" } }
 
 export default async function CartPage() {

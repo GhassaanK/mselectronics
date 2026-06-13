@@ -5,6 +5,8 @@ import { ArrowRight } from "lucide-react"
 import { StaggerChild, StaggerParent } from "@/components/shared/Motion"
 import { getCategories } from "@/lib/firebase/catalog"
 
+export const revalidate = 30
+
 export const metadata: Metadata = {
   title: "Categories",
   alternates: { canonical: "/categories" },

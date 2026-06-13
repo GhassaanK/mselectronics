@@ -1,4 +1,5 @@
 import Link from "next/link"
+
 import {
   Package,
   Tag,
@@ -16,6 +17,8 @@ import { BannerForm } from "@/components/admin/BannerForm"
 import { getBrands, getCategories } from "@/lib/firebase/catalog"
 import { getProducts } from "@/lib/firebase/products"
 import { getBanners } from "@/lib/firebase/banners"
+
+export const revalidate = 0
 
 export default async function AdminPage() {
   const [products, categories, brands, banners] = await Promise.all([
@@ -256,13 +259,6 @@ export default async function AdminPage() {
               Brand Colors
             </h2>
           </div>
-
-          <Card className="p-5">
-            <p className="mb-2 text-sm text-muted">
-              Theme editing has been disabled. Site uses a fixed
-              global color palette.
-            </p>
-          </Card>
         </div>
       </div>
     </AdminShell>

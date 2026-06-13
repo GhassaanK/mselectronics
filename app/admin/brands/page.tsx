@@ -18,6 +18,7 @@ import {
 } from "@/lib/firebase/admin-catalog"
 import type { Brand } from "@/types"
 
+
 function BrandRow({
   brand,
   onSave,

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import { CldImage } from "next-cloudinary"
 import type { Banner } from "@/lib/firebase/banners"
 
@@ -25,15 +24,13 @@ export function HeroSlider({ banners }: Props) {
   const [paused, setPaused] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const go = (dir: "prev" | "next") => {
-    setCurrent((c) =>
-      dir === "next" ? (c + 1) % slides.length : (c - 1 + slides.length) % slides.length
-    )
+  const goNext = () => {
+    setCurrent((c) => (c + 1) % slides.length)
   }
 
   useEffect(() => {
     if (paused || slides.length < 2) return
-    intervalRef.current = setInterval(() => go("next"), 5000)
+    intervalRef.current = setInterval(goNext, 4000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [paused, slides.length, current])
 
@@ -65,9 +62,9 @@ export function HeroSlider({ banners }: Props) {
           />
         ) : null}
 
-        {/* Single overlay — left-weighted, image breathes on the right */}
+        {/* Stronger gradient so text reads clearly */}
         {(slide.imagePublicId || slide.imageUrl) && (
-          <div className="absolute inset-0 bg-gradient-to-r from-[#060B18]/90 via-[#060B18]/55 to-[#060B18]/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#060B18]/95 via-[#060B18]/65 to-[#060B18]/15" />
         )}
       </div>
 
@@ -78,7 +75,7 @@ export function HeroSlider({ banners }: Props) {
             <div key={`copy-${current}`} className="max-w-xl space-y-5 animate-slide-up">
 
               {/* Eyebrow */}
-              <p className="text-[11px] font-medium tracking-[0.28em] text-blue-400/70 uppercase">
+              <p className="text-[11px] font-medium tracking-[0.28em] text-blue-400 uppercase">
                 MS Electronics · Karachi
               </p>
 
@@ -91,7 +88,7 @@ export function HeroSlider({ banners }: Props) {
 
               {/* Subheadline */}
               {slide.subheadline && (
-                <p className="max-w-sm text-[0.9rem] leading-relaxed text-white/55 md:text-[0.95rem]">
+                <p className="max-w-sm text-[0.9rem] leading-relaxed text-white/80 md:text-[0.95rem]">
                   {slide.subheadline}
                 </p>
               )}
@@ -107,7 +104,7 @@ export function HeroSlider({ banners }: Props) {
                   </Link>
                   <Link
                     href="/contact"
-                    className="text-sm font-medium text-white/40 underline-offset-4 transition-colors duration-200 hover:text-white/70 hover:underline"
+                    className="text-sm font-medium text-white/60 underline-offset-4 transition-colors duration-200 hover:text-white/90 hover:underline"
                   >
                     Talk to us
                   </Link>
@@ -118,27 +115,7 @@ export function HeroSlider({ banners }: Props) {
         </div>
       )}
 
-      {/* Arrows — consistent, both ghost */}
-      {slides.length > 1 && (
-        <>
-          <button
-            onClick={() => go("prev")}
-            aria-label="Previous slide"
-            className="absolute left-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:border-white/25 hover:bg-white/10"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            onClick={() => go("next")}
-            aria-label="Next slide"
-            className="absolute right-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:border-white/25 hover:bg-white/10"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </>
-      )}
-
-      {/* Dots — bottom right, smaller */}
+      {/* Dots — bottom right */}
       {slides.length > 1 && (
         <div className="absolute bottom-6 right-6 flex items-center gap-1.5">
           {slides.map((_, i) => (

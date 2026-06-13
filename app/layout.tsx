@@ -18,11 +18,25 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(brandConfig.siteUrl),
+
   title: {
-    default: "MS Electronics | Premium Appliances",
+    default: "MS Electronics | Premium Home Appliances",
     template: "%s | MS Electronics",
   },
+
   description: brandConfig.companyDescription,
+
+  keywords: [
+    "MS Electronics",
+    "Air Conditioners",
+    "Refrigerators",
+    "LED TVs",
+    "Washing Machines",
+    "Kitchen Appliances",
+    "Electronics Karachi",
+    "Home Appliances Pakistan",
+  ],
+
   openGraph: {
     title: "MS Electronics",
     description: brandConfig.companyDescription,
@@ -30,11 +44,13 @@ export const metadata: Metadata = {
     siteName: "MS Electronics",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "MS Electronics",
     description: brandConfig.companyDescription,
   },
+
   alternates: {
     canonical: "/",
   },
@@ -47,20 +63,31 @@ export default function RootLayout({
 }) {
   const orgJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "Store",
+
     name: brandConfig.companyName,
     url: brandConfig.siteUrl,
+
     logo: `${brandConfig.siteUrl}${brandConfig.logo}`,
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: brandConfig.contactInfo.phone,
-      contactType: "sales",
+
+    telephone: brandConfig.contactInfo.phone,
+
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brandConfig.contactInfo.address,
     },
+
+    sameAs: [
+      brandConfig.socialLinks.facebook,
+      brandConfig.socialLinks.instagram,
+    ].filter(Boolean),
   }
 
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} min-h-screen bg-white font-sans antialiased`}
+      >
         <ThemeProvider theme={defaultTheme} />
 
         <Script
@@ -72,10 +99,19 @@ export default function RootLayout({
         />
 
         <CartProvider>
-          <AnnouncementBar />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          <div className="flex min-h-screen flex-col">
+
+            <AnnouncementBar />
+
+            <Navbar />
+
+            <main className="flex-1">
+              {children}
+            </main>
+
+            <Footer />
+
+          </div>
         </CartProvider>
       </body>
     </html>

@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card"
 import { getProducts } from "@/lib/firebase/products"
 import { formatPrice } from "@/lib/utils/format"
 
+const revalidate = 0
+
 export default async function AdminProductsPage() {
   const products = await getProducts()
   return (

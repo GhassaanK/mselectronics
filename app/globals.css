@@ -458,3 +458,29 @@ h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+@keyframes announcement-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  15% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  85% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+.animate-announcement-slide {
+  animation: announcement-slide 5s ease-in-out;
+}
