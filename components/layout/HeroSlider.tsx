@@ -21,9 +21,9 @@ type Props = { banners: Banner[] }
 
 export function HeroSlider({ banners }: Props) {
   const slides = banners.length > 0 ? banners : [{ id: "fallback", ...FALLBACK }]
-  const [current, setCurrent]   = useState(0)
-  const [paused, setPaused]     = useState(false)
-  const intervalRef             = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const go = (dir: "prev" | "next") => {
     setCurrent((c) =>
@@ -41,7 +41,7 @@ export function HeroSlider({ banners }: Props) {
 
   return (
     <div
-      className="relative h-[92vw] max-h-[680px] min-h-[420px] w-full overflow-hidden bg-[#F0EFED]"
+      className="relative h-[92vw] min-h-[560px] max-h-[820px] w-full overflow-hidden bg-[#0A0F1E]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -65,9 +65,9 @@ export function HeroSlider({ banners }: Props) {
           />
         ) : null}
 
-        {/* Subtle left vignette only when image is present */}
+        {/* Single overlay — left-weighted, image breathes on the right */}
         {(slide.imagePublicId || slide.imageUrl) && (
-          <div className="absolute inset-0 bg-gradient-to-r from-white/55 via-white/15 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#060B18]/90 via-[#060B18]/55 to-[#060B18]/10" />
         )}
       </div>
 
@@ -75,57 +75,72 @@ export function HeroSlider({ banners }: Props) {
       {(slide.headline || slide.subheadline || slide.ctaLabel) && (
         <div className="absolute inset-0 flex items-center">
           <div className="container-page">
-            <div key={`copy-${current}`} className="max-w-lg space-y-4 animate-slide-up">
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#888888]">
-                MS Electronics
+            <div key={`copy-${current}`} className="max-w-xl space-y-5 animate-slide-up">
+
+              {/* Eyebrow */}
+              <p className="text-[11px] font-medium tracking-[0.28em] text-blue-400/70 uppercase">
+                MS Electronics · Karachi
               </p>
+
+              {/* Headline */}
               {slide.headline && (
-                <h2 className="text-3xl font-bold leading-tight text-[#111111] md:text-4xl lg:text-5xl">
+                <h2 className="text-[2.6rem] font-bold leading-[1.06] tracking-tight text-white md:text-5xl lg:text-[3.5rem]">
                   {slide.headline}
                 </h2>
               )}
-              <div className="h-px w-8 bg-[#999999]" />
+
+              {/* Subheadline */}
               {slide.subheadline && (
-                <p className="text-sm leading-relaxed text-[#666666] md:text-base">
+                <p className="max-w-sm text-[0.9rem] leading-relaxed text-white/55 md:text-[0.95rem]">
                   {slide.subheadline}
                 </p>
               )}
+
+              {/* CTAs */}
               {slide.ctaLabel && slide.ctaHref && (
-                <Link
-                  href={slide.ctaHref}
-                  className="inline-flex items-center gap-2 rounded bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#333333]"
-                >
-                  {slide.ctaLabel}
-                </Link>
+                <div className="flex items-center gap-5 pt-1">
+                  <Link
+                    href={slide.ctaHref}
+                    className="inline-flex items-center rounded-lg bg-white px-7 py-3.5 text-sm font-semibold text-[#0A0F1E] transition-all duration-200 hover:bg-white/90 active:scale-[0.98]"
+                  >
+                    {slide.ctaLabel}
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="text-sm font-medium text-white/40 underline-offset-4 transition-colors duration-200 hover:text-white/70 hover:underline"
+                  >
+                    Talk to us
+                  </Link>
+                </div>
               )}
             </div>
           </div>
         </div>
       )}
 
-      {/* Arrows */}
+      {/* Arrows — consistent, both ghost */}
       {slides.length > 1 && (
         <>
           <button
             onClick={() => go("prev")}
             aria-label="Previous slide"
-            className="absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#CCCCCC] bg-white/80 text-[#525252] backdrop-blur-sm transition hover:bg-white hover:text-[#111111]"
+            className="absolute left-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:border-white/25 hover:bg-white/10"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
           <button
             onClick={() => go("next")}
             aria-label="Next slide"
-            className="absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#CCCCCC] bg-white/80 text-[#525252] backdrop-blur-sm transition hover:bg-white hover:text-[#111111]"
+            className="absolute right-5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:border-white/25 hover:bg-white/10"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
         </>
       )}
 
-      {/* Dots */}
+      {/* Dots — bottom right, smaller */}
       {slides.length > 1 && (
-        <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2">
+        <div className="absolute bottom-6 right-6 flex items-center gap-1.5">
           {slides.map((_, i) => (
             <button
               key={i}
@@ -133,7 +148,9 @@ export function HeroSlider({ banners }: Props) {
               aria-label={`Go to slide ${i + 1}`}
               className={[
                 "rounded-full transition-all duration-300",
-                i === current ? "h-2 w-6 bg-[#111111]" : "h-2 w-2 bg-[#AAAAAA] hover:bg-[#777777]",
+                i === current
+                  ? "h-1.5 w-5 bg-white"
+                  : "h-1.5 w-1.5 bg-white/25 hover:bg-white/45",
               ].join(" ")}
             />
           ))}

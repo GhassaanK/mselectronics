@@ -9,6 +9,7 @@ export const sampleCategories: Category[] = [
     slug: "air-conditioners",
     imagePublicId: "",
     imageUrl: "",
+    productCount: 0
   },
   {
     id: "refrigerators",
@@ -16,6 +17,7 @@ export const sampleCategories: Category[] = [
     slug: "refrigerators",
     imagePublicId: "",
     imageUrl: "",
+    productCount: 0
   },
   {
     id: "washing-machines",
@@ -23,6 +25,7 @@ export const sampleCategories: Category[] = [
     slug: "washing-machines",
     imagePublicId: "",
     imageUrl: "",
+    productCount: 0
   },
   {
     id: "led-tvs",
@@ -30,6 +33,7 @@ export const sampleCategories: Category[] = [
     slug: "led-tvs",
     imagePublicId: "",
     imageUrl: "",
+    productCount: 0
   },
   {
     id: "kitchen-appliances",
@@ -37,6 +41,7 @@ export const sampleCategories: Category[] = [
     slug: "kitchen-appliances",
     imagePublicId: "",
     imageUrl: "",
+    productCount: 0
   },
   {
     id: "fans",
@@ -44,6 +49,7 @@ export const sampleCategories: Category[] = [
     slug: "fans",
     imagePublicId: "",
     imageUrl: "",
+    productCount: 0
   },
 ]
 
@@ -166,14 +172,14 @@ export const sampleTestimonials: Testimonial[] = [
 ]
 
 export const sampleSettings: SiteSettings = {
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923001234567",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923116771224",
   heroHeadline: "Premium appliances with expert buying guidance.",
   heroSubheadline: "Browse leading brands, compare essentials, and send a WhatsApp inquiry for availability, warranty, delivery, and installment options.",
   heroImage: { publicId: "samples/ecommerce/analog-classic", alt: "Premium home appliance display" },
   installmentTitle: "Installment guidance made simple",
   installmentDescription: "Ask our team about available installment options and product-specific eligibility before you buy.",
   companyName: "MS Electronics",
-  companyAddress: "Main Electronics Market, Pakistan",
-  companyPhone: "+92 300 1234567",
+  companyAddress: "Shop 01, Next to Bank Alfalah, Main Chorangi, Landhi 06, Karachi",
+  companyPhone: "+92 311 6771224",
   socialLinks: {}
 }

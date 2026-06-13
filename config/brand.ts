@@ -1,18 +1,18 @@
 export const brandConfig = {
   companyName: "MS Electronics",
   companyDescription: "Premium appliances, trusted guidance, and WhatsApp-first inquiries for homes across Pakistan.",
-  logo: "/logo.svg",
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923001234567",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://mselectronics.pk",
+  logo: "/logo.png",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923116771224",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://mselectroplace.com",
   socialLinks: {
-    facebook: "https://facebook.com/mselectronics",
-    instagram: "https://instagram.com/mselectronics",
-    tiktok: "https://tiktok.com/@mselectronics"
+    facebook: "https://facebook.com/mselectroplace",
+    instagram: "https://instagram.com/mselectroplace",
+    tiktok: "#"
   },
   contactInfo: {
-    address: "Main Electronics Market, Pakistan",
-    phone: "+92 300 1234567",
-    email: "info@mselectronics.pk"
+    address: "Shop 01, Next to Bank Alfalah, Main Chorangi, Landhi 06, Karachi",
+    phone: "+92 311 6771224",
+    email: "info@mselectroplace.com"
   },
   brandColors: {
     primaryFrom: "#1a1aff",

@@ -9,18 +9,18 @@ import { brandConfig } from "@/config/brand"
 import { useCart } from "@/hooks/useCart"
 
 const nav = [
-  { href: "/shop",       label: "Shop" },
-  { href: "/brands",     label: "Brands" },
+  { href: "/shop", label: "Shop" },
+  { href: "/brands", label: "Brands" },
   { href: "/categories", label: "Categories" },
-  { href: "/about",      label: "About" },
-  { href: "/contact",    label: "Contact" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ]
 
 export function Navbar() {
   const { count } = useCart()
-  const pathname  = usePathname()
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen]         = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -45,24 +45,19 @@ export function Navbar() {
             : "border-b border-gray-100",
         ].join(" ")}
       >
-        <div className="container-page flex h-[68px] items-center justify-between gap-4">
+        <div className="container-page flex h-[84px] items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link href="/" aria-label={brandConfig.companyName} className="flex shrink-0 items-center">
-            {brandConfig.logo ? (
-              <Image
-                src={brandConfig.logo}
-                alt={brandConfig.companyName}
-                width={180}
-                height={44}
-                priority
-                className="h-9 w-auto"
-              />
-            ) : (
-              <span className="text-xl font-extrabold tracking-tight text-[#111111]">
-                {brandConfig.companyName}
-              </span>
-            )}
+          <Link
+            href="/"
+            aria-label={brandConfig.companyName}
+            className="flex items-center"
+          >
+            <img
+              src={brandConfig.logo}
+              alt={brandConfig.companyName}
+              className="h-14 w-auto"
+            />
           </Link>
 
           {/* Desktop nav */}

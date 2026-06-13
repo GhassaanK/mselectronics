@@ -77,29 +77,70 @@ export default async function HomePage() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           2. TRUST BAR — standalone, full width
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="border-b border-[#E8ECF4] bg-white">
-        <div className="container-page grid grid-cols-2 divide-x divide-[#E8ECF4] md:grid-cols-4">
-          {trustItems.map(({ icon: Icon, label, desc }) => (
-            <div
-              key={label}
-              className="flex items-center gap-3 px-6 py-5"
+      <section className="bg-white py-6 border-b border-[#E8ECF4]">
+  <div className="container-page">
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+
+      {trustItems.map(({ icon: Icon, label, desc }) => (
+        <div
+          key={label}
+          className="
+            group
+            flex
+            items-center
+            gap-4
+            rounded-2xl
+            border
+            border-[#E8ECF4]
+            bg-[#FAFBFD]
+            px-5
+            py-5
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-blue-200
+            hover:bg-white
+            hover:shadow-[0_10px_30px_rgb(28,78,216,0.08)]
+          "
+        >
+          <div
+            className="
+              flex
+              h-14
+              w-14
+              shrink-0
+              items-center
+              justify-center
+              rounded-2xl
+              bg-blue-50
+              text-blue-600
+              transition-all
+              duration-300
+              group-hover:bg-blue-600
+              group-hover:text-white
+            "
+          >
+            <Icon size={24} />
+          </div>
+
+          <div>
+            <h3
+              className="text-sm font-bold text-[#0A0F1E]"
+              style={{ fontFamily: "'Sora', sans-serif" }}
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                <Icon size={20} />
-              </div>
-              <div>
-                <p
-                  className="text-sm font-bold text-[#0A0F1E]"
-                  style={{ fontFamily: "'Sora', sans-serif" }}
-                >
-                  {label}
-                </p>
-                <p className="text-xs text-slate-400">{desc}</p>
-              </div>
-            </div>
-          ))}
+              {label}
+            </h3>
+
+            <p className="mt-1 text-xs leading-relaxed text-slate-500">
+              {desc}
+            </p>
+          </div>
         </div>
-      </section>
+      ))}
+
+    </div>
+  </div>
+</section>
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           3. SHOP BY CATEGORY — visual grid

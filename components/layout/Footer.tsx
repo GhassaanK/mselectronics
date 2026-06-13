@@ -25,12 +25,12 @@ export function Footer() {
         <div className="space-y-5">
           {brandConfig.logo ? (
             <Image
-              src={brandConfig.logo}
-              alt={brandConfig.companyName}
-              width={160}
-              height={40}
-              className="h-9 w-auto"
-            />
+  src={brandConfig.logo}
+  alt={brandConfig.companyName}
+  width={80}
+  height={80}
+  className="h-16 w-16 object-contain"
+ />
           ) : (
             <span className="text-lg font-extrabold text-[#111111]">
               {brandConfig.companyName}
@@ -55,8 +55,7 @@ export function Footer() {
           <div className="flex items-center gap-3">
             {[
               { href: brandConfig.socialLinks.facebook,  label: "Facebook",  char: "f" },
-              { href: brandConfig.socialLinks.instagram, label: "Instagram", char: "ig" },
-              { href: brandConfig.socialLinks.tiktok,    label: "TikTok",    char: "tt" },
+              { href: brandConfig.socialLinks.instagram, label: "Instagram", char: "ig" }
             ].map(({ href, label, char }) => (
               <Link
                 key={label}
@@ -129,7 +128,7 @@ export function Footer() {
       {/* ── Bottom bar ──────────────────────────────────── */}
       <div className="border-t border-gray-200">
         <div className="container-page flex items-center justify-center py-4 text-xs text-[#888888]">
-          <p>© {new Date().getFullYear()} {brandConfig.companyName} — All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {brandConfig.companyName} - All rights reserved.</p>
         </div>
       </div>
 
