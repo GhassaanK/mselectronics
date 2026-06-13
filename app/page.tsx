@@ -78,13 +78,13 @@ export default async function HomePage() {
           2. TRUST BAR — standalone, full width
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <section className="bg-white py-6 border-b border-[#E8ECF4]">
-  <div className="container-page">
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="container-page">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
 
-      {trustItems.map(({ icon: Icon, label, desc }) => (
-        <div
-          key={label}
-          className="
+            {trustItems.map(({ icon: Icon, label, desc }) => (
+              <div
+                key={label}
+                className="
             group
             flex
             items-center
@@ -102,9 +102,9 @@ export default async function HomePage() {
             hover:bg-white
             hover:shadow-[0_10px_30px_rgb(28,78,216,0.08)]
           "
-        >
-          <div
-            className="
+              >
+                <div
+                  className="
               flex
               h-14
               w-14
@@ -119,28 +119,28 @@ export default async function HomePage() {
               group-hover:bg-blue-600
               group-hover:text-white
             "
-          >
-            <Icon size={24} />
-          </div>
+                >
+                  <Icon size={24} />
+                </div>
 
-          <div>
-            <h3
-              className="text-sm font-bold text-[#0A0F1E]"
-              style={{ fontFamily: "'Sora', sans-serif" }}
-            >
-              {label}
-            </h3>
+                <div>
+                  <h3
+                    className="text-sm font-bold text-[#0A0F1E]"
+                    style={{ fontFamily: "'Sora', sans-serif" }}
+                  >
+                    {label}
+                  </h3>
 
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">
-              {desc}
-            </p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                    {desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+
           </div>
         </div>
-      ))}
-
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           3. SHOP BY CATEGORY — visual grid
@@ -226,22 +226,22 @@ export default async function HomePage() {
           4. BRANDS MARQUEE STRIP
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       {featuredBrands.length > 0 && (
-        <section className="border-y border-[#E8ECF4] bg-white py-5">
-          <div className="relative overflow-hidden">
+        <section className="border-y border-[#E8ECF4] bg-white py-5 overflow-hidden">
+          <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent" />
-            <div className="flex animate-marquee items-center gap-14 whitespace-nowrap">
+            <div className="flex min-w-max animate-marquee items-center gap-14">
               {marqueeBrands.map((brand, i) => (
                 <Link
                   key={`${brand.id}-${i}`}
                   href={`/shop?brand=${brand.slug}`}
-                  className="flex h-20 w-44 items-center justify-center rounded-xl border border-transparent bg-white px-6 transition-all duration-300 hover:border-[#E8ECF4]"
+                  className="flex h-20 w-44 shrink-0 items-center justify-center rounded-xl border border-transparent bg-white px-6 transition-all duration-300 hover:border-[#E8ECF4]"
                 >
                   {brand.logoUrl ? (
                     <img
                       src={brand.logoUrl}
                       alt={brand.name}
-                      className="max-h-12 w-auto object-contain opacity-70 transition-opacity duration-300 hover:opacity-100"
+                      className="h-12 w-auto object-contain opacity-70 transition-opacity duration-300 hover:opacity-100"
                     />
                   ) : (
                     <span

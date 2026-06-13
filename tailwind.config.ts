@@ -14,25 +14,17 @@ const config: Config = {
       },
 
       colors: {
-        // Core semantic colors
         primary: "rgb(var(--primary))",
-
         background: "rgb(var(--background))",
         surface: "rgb(var(--surface))",
         card: "rgb(var(--card))",
-
         foreground: "rgb(var(--foreground))",
         muted: "rgb(var(--muted))",
-
         border: "rgb(var(--border))",
-
-        // Brand colors
         brand: {
           DEFAULT: "rgb(var(--brand))",
           dark: "rgb(var(--brand-dark))",
         },
-
-        // Status colors
         success: "rgb(var(--success))",
         warning: "rgb(var(--warning))",
         danger: "rgb(var(--danger))",
@@ -63,6 +55,17 @@ const config: Config = {
 
       transitionDuration: {
         premium: "var(--duration-premium)",
+      },
+
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
+
+      animation: {
+        marquee: "marquee 30s linear infinite",
       },
     },
   },
