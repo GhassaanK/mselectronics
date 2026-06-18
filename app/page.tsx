@@ -7,6 +7,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { HeroSlider } from "@/components/layout/HeroSlider"
+import { SocialDrawer } from "@/components/layout/SocialDrawer"
 import { CategoryTabProducts } from "@/components/shop/CategoryTabProducts"
 import { ProductGrid } from "@/components/shop/ProductGrid"
 import { Reveal, StaggerChild, StaggerParent } from "@/components/shared/Motion"
@@ -26,12 +27,11 @@ import type { Category } from "@/types"
 
 export const revalidate = 30
 
-
 const trustItems = [
-  { icon: BadgeCheck, label: "Official Store", desc: "100% authentic products" },
-  { icon: Zap, label: "Easy Payment", desc: "Pay easily and securely" },
-  { icon: ShieldCheck, label: "Official Warranty", desc: "Brand warranty on all items" },
-  { icon: Truck, label: "Same-Week Delivery", desc: "Fast delivery across Karachi" },
+  { icon: BadgeCheck, stat: "100%", label: "Authentic, official store" },
+  { icon: Zap, stat: "EMI", label: "Easy monthly installments" },
+  { icon: ShieldCheck, stat: "1 yr+", label: "Brand warranty included" },
+  { icon: Truck, stat: "7 days", label: "Same-week Karachi delivery" },
 ]
 
 export default async function HomePage() {
@@ -70,75 +70,43 @@ export default async function HomePage() {
     <div className="overflow-x-hidden">
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          SOCIAL DRAWER — fixed, vertical-center, left edge
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <SocialDrawer />
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           1. HERO SLIDER (full-bleed, data-driven)
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <HeroSlider banners={activeBanners} />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          2. TRUST BAR — standalone, full width
+          2. TRUST BAR — stat-forward, single row, all devices
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="bg-white py-6 border-b border-[#E8ECF4]">
+      <section className="bg-white py-6 border-b border-[#E8ECF4] sm:py-8">
         <div className="container-page">
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-
-            {trustItems.map(({ icon: Icon, label, desc }) => (
-              <div
-                key={label}
-                className="
-            group
-            flex
-            items-center
-            gap-4
-            rounded-2xl
-            border
-            border-[#E8ECF4]
-            bg-[#FAFBFD]
-            px-5
-            py-5
-            transition-all
-            duration-300
-            hover:-translate-y-1
-            hover:border-blue-200
-            hover:bg-white
-            hover:shadow-[0_10px_30px_rgb(28,78,216,0.08)]
-          "
-              >
+          <StaggerParent className="grid grid-cols-2 divide-y divide-[#E8ECF4] overflow-hidden rounded-2xl border border-[#E8ECF4] sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+            {trustItems.map(({ icon: Icon, stat, label }, i) => (
+              <StaggerChild key={label}>
                 <div
-                  className="
-              flex
-              h-14
-              w-14
-              shrink-0
-              items-center
-              justify-center
-              rounded-2xl
-              bg-blue-50
-              text-blue-600
-              transition-all
-              duration-300
-              group-hover:bg-blue-600
-              group-hover:text-white
-            "
+                  className={[
+                    "group flex flex-col gap-1 px-4 py-5 transition-colors duration-300 hover:bg-[#FAFBFD] sm:px-5 sm:py-6",
+                    i % 2 === 0 ? "border-r border-[#E8ECF4] sm:border-r-0" : "",
+                  ].join(" ")}
                 >
-                  <Icon size={24} />
-                </div>
-
-                <div>
-                  <h3
-                    className="text-sm font-bold text-[#0A0F1E]"
+                  <Icon size={18} className="mb-1 text-blue-600 transition-transform duration-300 group-hover:scale-110" />
+                  <p
+                    className="text-[1.6rem] font-bold leading-none text-[#0A0F1E] sm:text-[1.85rem]"
                     style={{ fontFamily: "'Sora', sans-serif" }}
                   >
+                    {stat}
+                  </p>
+                  <p className="text-xs leading-snug text-slate-500 sm:text-[0.8rem]">
                     {label}
-                  </h3>
-
-                  <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                    {desc}
                   </p>
                 </div>
-              </div>
+              </StaggerChild>
             ))}
-
-          </div>
+          </StaggerParent>
         </div>
       </section>
 

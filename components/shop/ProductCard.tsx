@@ -1,6 +1,6 @@
 "use client"
 
-import { Eye, ShoppingBag, Heart } from "lucide-react"
+import { Eye, ShoppingBag } from "lucide-react"
 import { CldImage } from "next-cloudinary"
 import Link from "next/link"
 import { useCart } from "@/hooks/useCart"
@@ -9,7 +9,8 @@ import type { SerializableProduct } from "@/types"
 
 export function ProductCard({ product }: { product: SerializableProduct }) {
   const { addItem } = useCart()
-  const image = product.images?.[0] ?? { publicId: "samples/ecommerce/analog-classic", alt: product.name }
+  const image = product.images?.[0]
+  const hasValidImage = Boolean(image?.publicId && image.publicId !== "placeholder")
   const inStock = product.availability === "In Stock"
 
   return (
@@ -17,13 +18,23 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
       {/* Image area */}
       <div className="product-card-wrap relative overflow-hidden rounded-xl bg-[#F2F2F2]">
         <Link href={`/shop/${product.id}`} className="block aspect-square">
-          <CldImage
-            src={image.publicId}
-            alt={image.alt}
-            fill
-            sizes="(min-width: 1024px) 25vw, 50vw"
-            className="object-contain p-5 transition-transform duration-300 group-hover:scale-105"
-          />
+          {hasValidImage ? (
+            <CldImage
+              src={image!.publicId}
+              alt={image!.alt || product.name}
+              fill
+              sizes="(min-width: 1024px) 25vw, 50vw"
+              className="object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-[#CCCCCC]">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 01-8 0" />
+              </svg>
+            </div>
+          )}
         </Link>
 
         {/* Badge */}
@@ -49,13 +60,6 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
           >
             <ShoppingBag size={15} />
           </button>
-          <button
-            aria-label="Wishlist"
-            className="product-action-btn"
-            title="Wishlist"
-          >
-            <Heart size={15} />
-          </button>
           <Link
             href={`/shop/${product.id}`}
             aria-label="View product"
@@ -69,6 +73,12 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
 
       {/* Info area */}
       <div className="mt-3 space-y-1 px-0.5">
+        {/* Brand label — matches CategoryTabProducts style */}
+        {product.brand && (
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-[#AAAAAA]">
+            {product.brand}
+          </p>
+        )}
         <Link
           href={`/shop/${product.id}`}
           className="line-clamp-2 text-sm font-medium leading-snug text-[#111111] transition-colors hover:text-[#525252]"
@@ -85,11 +95,15 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
             </span>
           )}
         </div>
-        {!inStock && (
-          <span className="inline-block rounded bg-[#F8F8F8] px-2 py-0.5 text-[10px] font-semibold text-[#525252]">
-            {product.availability}
-          </span>
-        )}
+        {/* Always show availability badge — green for in-stock, grey otherwise */}
+        <span className={[
+          "inline-block rounded px-2 py-0.5 text-[10px] font-medium",
+          inStock
+            ? "bg-[#F0FDF4] text-[#16A34A]"
+            : "bg-[#F8F8F8] text-[#525252]",
+        ].join(" ")}>
+          {inStock ? "In Stock" : product.availability}
+        </span>
       </div>
     </div>
   )

@@ -11,13 +11,17 @@ import { formatPrice } from "@/lib/utils/format"
 import { logInquiry } from "@/lib/firebase/inquiries"
 import type { SerializableProduct } from "@/types"
 
+const MAX_QUANTITY = 10
+
 export function CartPageClient({ products, whatsappNumber }: { products: SerializableProduct[]; whatsappNumber: string }) {
   const { items, updateQuantity, removeItem, clearCart } = useCart()
   const selected = items
     .map((item) => ({ item, product: products.find((product) => product.id === item.id) }))
     .filter((entry): entry is { item: typeof items[number]; product: SerializableProduct } => Boolean(entry.product))
 
-  const expandedProducts = selected.flatMap(({ item, product }) => Array.from({ length: item.quantity }, () => product))
+  const expandedProducts = selected.flatMap(({ item, product }) =>
+    Array.from({ length: Math.min(item.quantity, MAX_QUANTITY) }, () => product)
+  )
   const total = selected.reduce((sum, entry) => sum + entry.product.price * entry.item.quantity, 0)
 
   function submitInquiry() {
@@ -55,9 +59,25 @@ export function CartPageClient({ products, whatsappNumber }: { products: Seriali
                 <p className="text-sm text-muted">{product.brand} - {formatPrice(product.price)}</p>
               </div>
               <div className="flex items-center gap-sm">
-                <Button variant="outline" size="icon" onClick={() => updateQuantity(product.id, item.quantity - 1)} aria-label="Decrease quantity"><Minus size={16} /></Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => updateQuantity(product.id, item.quantity - 1)}
+                  disabled={item.quantity <= 1}
+                  aria-label="Decrease quantity"
+                >
+                  <Minus size={16} />
+                </Button>
                 <span className="w-8 text-center font-semibold">{item.quantity}</span>
-                <Button variant="outline" size="icon" onClick={() => updateQuantity(product.id, item.quantity + 1)} aria-label="Increase quantity"><Plus size={16} /></Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => updateQuantity(product.id, Math.min(item.quantity + 1, MAX_QUANTITY))}
+                  disabled={item.quantity >= MAX_QUANTITY}
+                  aria-label="Increase quantity"
+                >
+                  <Plus size={16} />
+                </Button>
                 <Button variant="ghost" size="icon" onClick={() => removeItem(product.id)} aria-label="Remove item"><Trash2 size={16} /></Button>
               </div>
             </Card>
