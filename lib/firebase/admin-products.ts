@@ -14,9 +14,11 @@ import {
 } from "firebase/firestore/lite"
 import { db, firebaseEnabled } from "@/lib/firebase/config"
 import type {
+  ColorVariant,
   ProductAvailability,
   ProductBadge,
   ProductImage,
+  SizeVariant,
 } from "@/types"
 
 export type AdminProductInput = {
@@ -31,6 +33,8 @@ export type AdminProductInput = {
   availability: ProductAvailability
   featured: boolean
   badge?: ProductBadge
+  colorVariants?: ColorVariant[]
+  sizeVariants?: SizeVariant[]
 }
 
 async function recalculateCategoryCount(categoryName: string) {

@@ -9,15 +9,18 @@ import type { SerializableProduct } from "@/types"
 type ProductActionsProps = {
   product: SerializableProduct
   whatsappNumber: string
+  /** e.g. "1.5 Ton — Silver" — appended to the WhatsApp inquiry message */
+  variantLabel?: string
 }
 
 export function ProductActions({
   product,
   whatsappNumber,
+  variantLabel,
 }: ProductActionsProps) {
   const { addItem } = useCart()
 
-  const href = buildWhatsAppUrl([product], whatsappNumber)
+  const href = buildWhatsAppUrl([product], whatsappNumber, variantLabel)
 
   function handleAddToCart() {
     addItem(product.id)

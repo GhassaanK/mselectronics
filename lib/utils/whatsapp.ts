@@ -5,8 +5,16 @@ type WhatsAppProduct = {
   price: number
 }
 
-export function buildWhatsAppUrl(products: WhatsAppProduct[], phoneNumber: string) {
-  const lines = products.map((product, index) => `${index + 1}. ${product.name} - ${formatPrice(product.price)}`)
+export function buildWhatsAppUrl(
+  products: WhatsAppProduct[],
+  phoneNumber: string,
+  variantLabel?: string
+) {
+  const lines = products.map((product, index) => {
+    const label = variantLabel ? ` (${variantLabel})` : ""
+    return `${index + 1}. ${product.name}${label} - ${formatPrice(product.price)}`
+  })
+
   const message = [
     "Assalam u Alaikum,",
     "",

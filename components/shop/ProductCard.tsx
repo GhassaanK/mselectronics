@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Eye, ShoppingBag } from "lucide-react"
 import { CldImage } from "next-cloudinary"
 import Link from "next/link"
@@ -9,22 +10,66 @@ import type { SerializableProduct } from "@/types"
 
 export function ProductCard({ product }: { product: SerializableProduct }) {
   const { addItem } = useCart()
-  const image = product.images?.[0]
-  const hasValidImage = Boolean(image?.publicId && image.publicId !== "placeholder")
+
+  const baseImages = (product.images ?? []).filter(
+    (img) => img?.publicId && img.publicId !== "placeholder"
+  )
+  const colorVariants = product.colorVariants ?? []
+  const hasColorVariants = colorVariants.length > 0
+
+  // Track which color is "pinned" by a click (null = base)
+  const [pinnedColorId, setPinnedColorId] = useState<string | null>(null)
+  // Track which color is hovered (null = none)
+  const [hoveredColorId, setHoveredColorId] = useState<string | null>(null)
+
+  // Resolve the active color variant for display
+  const activeColorId = hoveredColorId ?? pinnedColorId
+  const activeColor = colorVariants.find((v) => v.id === activeColorId) ?? null
+
+  // Resolve which images to show
+  const displayImages = activeColor?.images?.length
+    ? activeColor.images
+    : baseImages
+
+  const hasImages = displayImages.length > 0
+
+  // For products WITHOUT color variants: hover switches to images[1] (existing behaviour)
+  const [baseHovered, setBaseHovered] = useState(false)
+
+  const activeImage = hasColorVariants
+    ? displayImages[0]
+    : baseHovered && displayImages.length > 1
+      ? displayImages[1]
+      : displayImages[0]
+
   const inStock = product.availability === "In Stock"
 
+  function handleCardMouseEnter() {
+    if (!hasColorVariants) setBaseHovered(true)
+  }
+
+  function handleCardMouseLeave() {
+    if (!hasColorVariants) setBaseHovered(false)
+    setHoveredColorId(null)
+  }
+
   return (
-    <div className="group flex flex-col">
+    <div
+      className="group flex flex-col"
+      onMouseEnter={handleCardMouseEnter}
+      onMouseLeave={handleCardMouseLeave}
+    >
       {/* Image area */}
       <div className="product-card-wrap relative overflow-hidden rounded-xl bg-[#F2F2F2]">
         <Link href={`/shop/${product.id}`} className="block aspect-square">
-          {hasValidImage ? (
+          {hasImages ? (
             <CldImage
-              src={image!.publicId}
-              alt={image!.alt || product.name}
+              key={activeImage?.publicId}
+              src={activeImage?.publicId ?? ""}
+              alt={activeImage?.alt || product.name}
               fill
               sizes="(min-width: 1024px) 25vw, 50vw"
-              className="object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+              className="object-contain p-5 transition-all duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-[#CCCCCC]">
@@ -40,7 +85,7 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
         {/* Badge */}
         {product.badge && (
           <span className={[
-            "absolute left-3 top-3 rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white",
+            "absolute left-3 top-3 z-10 rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white",
             product.badge === "Best Seller" ? "bg-[#111111]" :
             product.badge === "On Sale"     ? "bg-[#DC2626]" :
             product.badge === "New Arrival" ? "bg-[#16A34A]" :
@@ -50,7 +95,7 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
           </span>
         )}
 
-        {/* Action icons overlay — slides up on hover */}
+        {/* Action icons overlay */}
         <div className="product-actions-overlay">
           <button
             onClick={() => addItem(product.id)}
@@ -73,7 +118,6 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
 
       {/* Info area */}
       <div className="mt-3 space-y-1 px-0.5">
-        {/* Brand label — matches CategoryTabProducts style */}
         {product.brand && (
           <p className="text-[10px] font-semibold uppercase tracking-widest text-[#AAAAAA]">
             {product.brand}
@@ -95,7 +139,6 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
             </span>
           )}
         </div>
-        {/* Always show availability badge — green for in-stock, grey otherwise */}
         <span className={[
           "inline-block rounded px-2 py-0.5 text-[10px] font-medium",
           inStock
@@ -104,6 +147,37 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
         ].join(" ")}>
           {inStock ? "In Stock" : product.availability}
         </span>
+
+        {/* Color swatches — always visible when color variants exist */}
+        {hasColorVariants && (
+          <div className="flex items-center gap-1.5 pt-1">
+            {colorVariants.map((variant) => {
+              const isPinned = variant.id === pinnedColorId
+              return (
+                <button
+                  key={variant.id}
+                  type="button"
+                  title={variant.label}
+                  aria-label={`View in ${variant.label}`}
+                  aria-pressed={isPinned}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setPinnedColorId(isPinned ? null : variant.id)
+                  }}
+                  onMouseEnter={() => setHoveredColorId(variant.id)}
+                  onMouseLeave={() => setHoveredColorId(null)}
+                  className={[
+                    "relative h-4 w-4 rounded-full border transition-all duration-150",
+                    isPinned
+                      ? "border-[#111111] scale-110"
+                      : "border-[#E5E5E5] hover:border-[#AAAAAA] hover:scale-110",
+                  ].join(" ")}
+                  style={{ backgroundColor: variant.hex }}
+                />
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

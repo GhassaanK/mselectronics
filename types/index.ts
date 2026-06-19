@@ -15,6 +15,23 @@ export type ProductBadge =
   | "New Arrival"
   | "On Sale"
 
+export type ColorVariant = {
+  id: string
+  label: string
+  hex: string
+  images: { publicId: string; alt?: string }[]
+}
+
+export type SizeVariant = {
+  id: string
+  label: string
+  price: number
+  originalPrice?: number
+  availability: ProductAvailability
+  specs: Record<string, string>
+  features: string[]
+}
+
 export type Product = {
   id: string
   name: string
@@ -28,6 +45,8 @@ export type Product = {
   availability: ProductAvailability
   featured: boolean
   badge?: ProductBadge
+  colorVariants?: ColorVariant[]
+  sizeVariants?: SizeVariant[]
   createdAt: Timestamp
   updatedAt: Timestamp
 }
