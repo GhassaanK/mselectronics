@@ -100,15 +100,21 @@ export default function RootLayout({
         <CartProvider>
           <div className="flex min-h-screen flex-col">
 
-            <AnnouncementBar />
+            <div className="public-chrome">
+              <AnnouncementBar />
+            </div>
 
-            <Navbar />
+            <div className="public-chrome">
+              <Navbar />
+            </div>
 
             <main className="flex-1">
               {children}
             </main>
 
-            <Footer />
+            <div className="public-chrome">
+              <Footer />
+            </div>
 
           </div>
         </CartProvider>

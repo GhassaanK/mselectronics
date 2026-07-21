@@ -5,7 +5,6 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { CldImage } from "next-cloudinary"
 import { formatPrice } from "@/lib/utils/format"
-import type { serializeProduct } from "@/lib/utils/serialize"
 import type { Category, SerializableProduct } from "@/types"
 
 type Props = {
@@ -42,15 +41,15 @@ export function CategoryTabProducts({ categories, productsByCategory }: Props) {
       </div>
 
       {/* ── Product grid ────────────────────────────── */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(160px,100%),1fr))] gap-4 sm:gap-5 lg:grid-cols-4">
         {products.slice(0, 8).map((product) => {
           const image = product.images?.[0]
           const inStock = product.availability === "In Stock"
 
           return (
-            <div key={product.id} className="group flex flex-col">
+            <div key={product.id} className="group flex min-w-0 flex-col">
               {/* Image */}
-              <div className="product-card-wrap relative overflow-hidden rounded-xl bg-[#F2F2F2]">
+              <div className="product-card-wrap relative overflow-hidden rounded-xl border border-[#E8ECF4] bg-[#F7F8FC]">
                 <Link href={`/shop/${product.id}`} className="block aspect-square">
                   {image?.publicId ? (
                     <CldImage
@@ -58,7 +57,7 @@ export function CategoryTabProducts({ categories, productsByCategory }: Props) {
                       alt={image.alt || product.name}
                       fill
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                      className="object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                      className="object-contain p-4 transition-transform duration-300 group-hover:scale-105 sm:p-5"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-[#CCCCCC]">
@@ -86,7 +85,7 @@ export function CategoryTabProducts({ categories, productsByCategory }: Props) {
               </div>
 
               {/* Info */}
-              <div className="mt-3 space-y-1 px-0.5">
+              <div className="mt-3 min-w-0 space-y-1 px-0.5">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-[#AAAAAA]">
                   {product.brand}
                 </p>
@@ -96,7 +95,7 @@ export function CategoryTabProducts({ categories, productsByCategory }: Props) {
                 >
                   {product.name}
                 </Link>
-                <div className="flex items-center gap-2 pt-0.5">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
                   <span className="text-sm font-semibold text-[#111111]">
                     {formatPrice(product.price)}
                   </span>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
 import { CldUploadWidget } from "next-cloudinary"
 import { collection, getDocs, orderBy, query } from "firebase/firestore/lite"
 import { Plus, Trash2 } from "lucide-react"
@@ -73,7 +74,13 @@ function textToSpecs(text: string): Record<string, string> {
   }, {})
 }
 
+function parseFiniteNumber(value: string) {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : NaN
+}
+
 export function ProductForm({ mode = "Create", initialProduct }: ProductFormProps) {
+  const router = useRouter()
   const [brands, setBrands] = useState<Brand[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [optionsLoading, setOptionsLoading] = useState(true)
@@ -112,15 +119,23 @@ export function ProductForm({ mode = "Create", initialProduct }: ProductFormProp
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
 
   useEffect(() => {
-    fetchOptions().then(({ brands: b, categories: c }) => {
-      setBrands(b)
-      setCategories(c)
-      setOptionsLoading(false)
-    })
+    fetchOptions()
+      .then(({ brands: b, categories: c }) => {
+        setBrands(b)
+        setCategories(c)
+      })
+      .catch((error) => {
+        setStatus(error instanceof Error ? error.message : "Unable to load brands and categories.")
+        setBrands([])
+        setCategories([])
+      })
+      .finally(() => {
+        setOptionsLoading(false)
+      })
   }, [])
 
   const canSubmit = useMemo(
-    () => name && brand && category && Number(price) > 0 && images.length > 0,
+    () => name.trim() && brand && category && parseFiniteNumber(price) > 0 && images.length > 0,
     [name, brand, category, price, images.length]
   )
 
@@ -180,18 +195,31 @@ export function ProductForm({ mode = "Create", initialProduct }: ProductFormProp
     }
 
     // Resolve size variants with their parsed specs/features
-    const resolvedSizeVariants: SizeVariant[] = sizeVariants.map((v) => ({
-      ...v,
-      specs: textToSpecs(sizeSpecsText[v.id] ?? ""),
-      features: (sizeFeaturesText[v.id] ?? "").split("\n").map((f) => f.trim()).filter(Boolean),
-    }))
+    const resolvedSizeVariants: SizeVariant[] = sizeVariants
+      .map((v) => ({
+        ...v,
+        label: v.label.trim(),
+        price: Number.isFinite(v.price) ? v.price : 0,
+        originalPrice: Number.isFinite(v.originalPrice) ? v.originalPrice : undefined,
+        specs: textToSpecs(sizeSpecsText[v.id] ?? ""),
+        features: (sizeFeaturesText[v.id] ?? "").split("\n").map((f) => f.trim()).filter(Boolean),
+      }))
+      .filter((v) => v.label && v.price > 0)
+
+    const resolvedColorVariants = colorVariants
+      .map((variant) => ({
+        ...variant,
+        label: variant.label.trim(),
+        images: variant.images.filter((image) => image.publicId),
+      }))
+      .filter((variant) => variant.label)
 
     const input = {
-      name,
+      name: name.trim(),
       brand,
       category,
-      price: Number(price),
-      originalPrice: originalPrice ? Number(originalPrice) : undefined,
+      price: parseFiniteNumber(price),
+      originalPrice: originalPrice && Number.isFinite(parseFiniteNumber(originalPrice)) ? parseFiniteNumber(originalPrice) : undefined,
       images,
       specs: Object.entries(specsText.split("\n").reduce<Record<string, string>>((acc, line) => {
         const [key, ...rest] = line.split(":")
@@ -203,7 +231,7 @@ export function ProductForm({ mode = "Create", initialProduct }: ProductFormProp
       availability,
       featured,
       badge: badge || undefined,
-      colorVariants: colorVariants.length > 0 ? colorVariants : undefined,
+      colorVariants: resolvedColorVariants.length > 0 ? resolvedColorVariants : undefined,
       sizeVariants: resolvedSizeVariants.length > 0 ? resolvedSizeVariants : undefined,
     }
 
@@ -212,6 +240,10 @@ export function ProductForm({ mode = "Create", initialProduct }: ProductFormProp
       if (mode === "Update" && initialProduct) await updateProduct(initialProduct.id, input)
       else await createProduct(input)
       setStatus(mode === "Update" ? "Product updated." : "Product created.")
+      router.refresh()
+      if (mode === "Create") {
+        router.push("/admin/products")
+      }
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Unable to save product.")
     }

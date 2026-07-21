@@ -77,15 +77,13 @@ export async function getProductsByCategory(
   const snapshot = await getDocs(
     query(
       collection(db!, "products"),
-      where("category", "==", category),
-      where("availability", "!=", "Out of Stock"),
-      orderBy("availability")
+      where("category", "==", category)
     )
   )
 
   return snapshot.docs.map((item) =>
     serializeProduct(item.id, item.data())
-  )
+  ).filter((product) => product.availability !== "Out of Stock")
 }
 
 export async function getProductsByBrand(
@@ -102,15 +100,13 @@ export async function getProductsByBrand(
   const snapshot = await getDocs(
     query(
       collection(db!, "products"),
-      where("brand", "==", brand),
-      where("availability", "!=", "Out of Stock"),
-      orderBy("availability")
+      where("brand", "==", brand)
     )
   )
 
   return snapshot.docs.map((item) =>
     serializeProduct(item.id, item.data())
-  )
+  ).filter((product) => product.availability !== "Out of Stock")
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {

@@ -1,13 +1,13 @@
 import { getBrands, getCategories } from "@/lib/firebase/catalog"
 import { NavbarClient } from "./NavbarClient"
 
+export const revalidate = 30
+
 export async function Navbar() {
   const [categories, brands] = await Promise.all([
     getCategories(),
     getBrands(),
   ])
-
-const revalidate = 30
 
   return (
     <NavbarClient

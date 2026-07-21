@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc } from "firebase/firestore/lite"
-import { db, firebaseEnabled } from "@/lib/firebase/config"
+import { auth, db, firebaseEnabled } from "@/lib/firebase/config"
 
 export type ThemeColors = {
   /** RGB triplets e.g. "10 15 30" */
@@ -28,6 +28,12 @@ export async function getTheme(): Promise<ThemeColors> {
 }
 
 export async function updateTheme(colors: ThemeColors) {
+  if (!auth?.currentUser) {
+    throw new Error("You must be signed in to manage theme settings.")
+  }
+
+  await auth.currentUser.getIdToken(true)
+
   if (!canUse()) throw new Error("Firebase is not configured.")
   return setDoc(doc(db!, "settings", "theme"), colors, { merge: true })
 }

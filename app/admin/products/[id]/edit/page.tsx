@@ -10,5 +10,20 @@ export default async function EditProductPage({ params }: Props) {
   const { id } = await params
   const product = await getProductById(id)
   if (!product) notFound()
-  return <AdminShell><h1 className="heading-tight mb-lg text-3xl">Edit Product</h1><ProductForm mode="Update" initialProduct={serializeProduct(product)} /></AdminShell>
+  return (
+    <AdminShell>
+      <div className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#737373]">
+          Catalog
+        </p>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#111111]">
+          Edit product
+        </h1>
+        <p className="mt-2 text-sm text-[#737373]">
+          Update product details, image assets, pricing, variants, and stock status.
+        </p>
+      </div>
+      <ProductForm mode="Update" initialProduct={serializeProduct(product)} />
+    </AdminShell>
+  )
 }

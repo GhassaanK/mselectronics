@@ -21,16 +21,29 @@ export function ProductActions({
   const { addItem } = useCart()
 
   const href = buildWhatsAppUrl([product], whatsappNumber, variantLabel)
+  const canInquire = product.availability !== "Out of Stock"
 
   function handleAddToCart() {
-    addItem(product.id)
+    if (!canInquire) return
+
+    const cartId = variantLabel ? `${product.id}::${variantLabel}` : product.id
+    addItem({
+      id: cartId,
+      productId: product.id,
+      variantLabel,
+      price: product.price,
+      name: product.name,
+    })
   }
 
-  function handleWhatsApp() {
-    void Promise.race([
-      logInquiry([product.id], "product-detail"),
-      new Promise((resolve) => setTimeout(resolve, 250)),
-    ])
+  async function handleWhatsApp() {
+    if (!canInquire) return
+
+    try {
+      await logInquiry([product.id], "product-detail")
+    } catch {
+      // The WhatsApp handoff should still work if analytics logging fails.
+    }
 
     window.location.href = href
   }
@@ -40,6 +53,7 @@ export function ProductActions({
       <button
         type="button"
         onClick={handleAddToCart}
+        disabled={!canInquire}
         className="flex w-full items-center justify-center gap-2 rounded-md border border-[#111111] bg-[#111111] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#262626] hover:border-[#262626]"
       >
         <ShoppingBag size={18} />
@@ -49,6 +63,7 @@ export function ProductActions({
       <button
         type="button"
         onClick={handleWhatsApp}
+        disabled={!canInquire}
         className="flex w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#1fb855]"
       >
         <MessageCircle size={18} />

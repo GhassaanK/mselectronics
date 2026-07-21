@@ -9,7 +9,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore/lite"
-import { db, firebaseEnabled } from "@/lib/firebase/config"
+import { auth, db, firebaseEnabled } from "@/lib/firebase/config"
 
 export type Banner = {
   id: string
@@ -27,6 +27,14 @@ export type BannerInput = Omit<Banner, "id">
 
 function canUse() {
   return firebaseEnabled && Boolean(db)
+}
+
+async function requireAdminUser() {
+  if (!auth?.currentUser) {
+    throw new Error("You must be signed in to manage banners.")
+  }
+
+  await auth.currentUser.getIdToken(true)
 }
 
 export async function getBanners(): Promise<Banner[]> {
@@ -57,16 +65,22 @@ export async function getBanners(): Promise<Banner[]> {
 }
 
 export async function createBanner(input: BannerInput) {
+  await requireAdminUser()
+
   if (!canUse()) throw new Error("Firebase is not configured.")
   return addDoc(collection(db!, "banners"), { ...input, createdAt: serverTimestamp() })
 }
 
 export async function updateBanner(id: string, input: Partial<BannerInput>) {
+  await requireAdminUser()
+
   if (!canUse()) throw new Error("Firebase is not configured.")
   return updateDoc(doc(db!, "banners", id), { ...input, updatedAt: serverTimestamp() })
 }
 
 export async function deleteBanner(id: string) {
+  await requireAdminUser()
+
   if (!canUse()) throw new Error("Firebase is not configured.")
   return deleteDoc(doc(db!, "banners", id))
 }

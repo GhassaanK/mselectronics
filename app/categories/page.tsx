@@ -18,7 +18,7 @@ export default async function CategoriesPage() {
   return (
     <div>
       {/* Hero */}
-      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-10 pt-12">
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] py-10 sm:py-12">
         <div className="container-page">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
             MS Electronics
@@ -37,8 +37,8 @@ export default async function CategoriesPage() {
 
       {/* Categories */}
       <div className="bg-white">
-        <div className="container-page py-12">
-          <div className="mb-8 flex items-center justify-between">
+        <div className="container-page py-10 sm:py-12">
+          <div className="responsive-section-head mb-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
                 Shop By Category
@@ -54,7 +54,7 @@ export default async function CategoriesPage() {
             </div>
           </div>
 
-          <StaggerParent className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <StaggerParent className="grid grid-cols-[repeat(auto-fit,minmax(min(170px,100%),1fr))] gap-4 sm:gap-5 lg:grid-cols-4">
             {categories.map((category) => (
               <StaggerChild key={category.id}>
                 <Link
@@ -68,7 +68,7 @@ export default async function CategoriesPage() {
                         src={category.imageUrl}
                         alt={category.name}
                         fill
-                        sizes="(max-width:768px) 50vw, 25vw"
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (

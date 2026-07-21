@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { Pencil, Trash2, Plus, Check, X } from "lucide-react"
 import { CldUploadWidget } from "next-cloudinary"
 import { collection, getDocs, query } from "firebase/firestore/lite"
@@ -54,19 +55,31 @@ function CategoryRow({
   const [imagePublicId, setImagePublicId] = useState(
     category.imagePublicId ?? ""
   )
+  const [error, setError] = useState("")
 
   async function save() {
+    if (!name.trim() || !slug.trim()) {
+      setError("Name and slug are required.")
+      return
+    }
+
     setSaving(true)
+    setError("")
 
-    await onSave(category.id, {
-      name,
-      slug,
-      imageUrl,
-      imagePublicId,
-    })
+    try {
+      await onSave(category.id, {
+        name: name.trim(),
+        slug: slug.trim(),
+        imageUrl,
+        imagePublicId,
+      })
 
-    setSaving(false)
-    setEditing(false)
+      setEditing(false)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to save category.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   function cancel() {
@@ -97,9 +110,11 @@ function CategoryRow({
         <td className="p-md">
           <div className="space-y-2">
             {imageUrl && (
-              <img
+              <Image
                 src={imageUrl}
                 alt=""
+                width={80}
+                height={56}
                 className="h-14 w-20 rounded object-cover"
               />
             )}
@@ -156,6 +171,9 @@ function CategoryRow({
               <X size={15} />
             </Button>
           </div>
+          {error ? (
+            <p className="mt-xs text-xs text-red-500">{error}</p>
+          ) : null}
         </td>
       </tr>
     )
@@ -173,9 +191,11 @@ function CategoryRow({
 
       <td className="p-md">
         {category.imageUrl ? (
-          <img
+          <Image
             src={category.imageUrl}
             alt=""
+            width={80}
+            height={56}
             className="h-14 w-20 rounded object-cover"
           />
         ) : (
@@ -232,6 +252,7 @@ function AddCategoryRow({
     useState("")
 
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
 
   function handleNameChange(value: string) {
     setName(value)
@@ -247,25 +268,33 @@ function AddCategoryRow({
   }
 
   async function save() {
-    if (!name.trim()) return
+    if (!name.trim() || !slug.trim()) {
+      setError("Name and slug are required.")
+      return
+    }
 
     setSaving(true)
+    setError("")
 
-    await onAdd({
-      name,
-      slug,
-      imageUrl,
-      imagePublicId,
-      productCount: 0,
-    })
+    try {
+      await onAdd({
+        name: name.trim(),
+        slug: slug.trim(),
+        imageUrl,
+        imagePublicId,
+        productCount: 0,
+      })
 
-    setName("")
-    setSlug("")
-    setImageUrl("")
-    setImagePublicId("")
-
-    setSaving(false)
-    setOpen(false)
+      setName("")
+      setSlug("")
+      setImageUrl("")
+      setImagePublicId("")
+      setOpen(false)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to add category.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!open) {
@@ -307,9 +336,11 @@ function AddCategoryRow({
       <td className="p-md">
         <div className="space-y-2">
           {imageUrl && (
-            <img
+            <Image
               src={imageUrl}
               alt=""
+              width={80}
+              height={56}
               className="h-14 w-20 rounded object-cover"
             />
           )}
@@ -364,6 +395,9 @@ function AddCategoryRow({
             <X size={15} />
           </Button>
         </div>
+        {error ? (
+          <p className="mt-xs text-xs text-red-500">{error}</p>
+        ) : null}
       </td>
     </tr>
   )
@@ -372,6 +406,7 @@ function AddCategoryRow({
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [status, setStatus] = useState("")
 
   useEffect(() => {
     async function load() {
@@ -381,49 +416,70 @@ export default function AdminCategoriesPage() {
         return
       }
 
-      const categoriesSnap = await getDocs(
-        query(collection(db, "categories"))
-      )
+      try {
+        const categoriesSnap = await getDocs(
+          query(collection(db, "categories"))
+        )
 
-      setCategories(
-        categoriesSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Category, "id">),
-        }))
-      )
-
-      setLoading(false)
+        setCategories(
+          categoriesSnap.docs.map((doc) => ({
+            id: doc.id,
+            ...(doc.data() as Omit<Category, "id">),
+          }))
+        )
+      } catch (error) {
+        setStatus(error instanceof Error ? error.message : "Unable to load categories.")
+        setCategories([])
+      } finally {
+        setLoading(false)
+      }
     }
 
     void load()
   }, [])
 
   async function handleAdd(input: CategoryInput) {
-    const ref = await createCategory(input)
+    try {
+      setStatus("Saving...")
+      const ref = await createCategory(input)
 
-    setCategories((prev) => [
-      ...prev,
-      {
-        id: ref.id,
-        ...input,
-        productCount: input.productCount ?? 0,
-      },
-    ])
+      setCategories((prev) => [
+        ...prev,
+        {
+          id: ref.id,
+          ...input,
+          productCount: input.productCount ?? 0,
+        },
+      ])
+      setStatus("Category added.")
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to add category."
+      setStatus(message)
+      throw new Error(message)
+    }
   }
 
   async function handleSave(
     id: string,
     input: Partial<CategoryInput>
   ) {
-    await updateCategory(id, input)
+    try {
+      setStatus("Saving...")
+      await updateCategory(id, input)
 
-    setCategories((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, ...input }
-          : item
+      setCategories((prev) =>
+        prev.map((item) =>
+          item.id === id
+            ? { ...item, ...input }
+            : item
+        )
       )
-    )
+      setStatus("Category saved.")
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to save category."
+      setStatus(message)
+      throw new Error(message)
+    }
   }
 
   async function handleDelete(
@@ -435,11 +491,17 @@ export default function AdminCategoriesPage() {
     )
       return
 
-    await deleteCategory(id)
+    try {
+      setStatus("Deleting...")
+      await deleteCategory(id)
 
-    setCategories((prev) =>
-      prev.filter((item) => item.id !== id)
-    )
+      setCategories((prev) =>
+        prev.filter((item) => item.id !== id)
+      )
+      setStatus("Category deleted.")
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Unable to delete category.")
+    }
   }
 
   return (
@@ -448,6 +510,9 @@ export default function AdminCategoriesPage() {
         <h1 className="heading-tight text-3xl">
           Categories
         </h1>
+        {status ? (
+          <p className="mt-xs text-sm text-muted">{status}</p>
+        ) : null}
       </div>
 
       <Card className="overflow-hidden">

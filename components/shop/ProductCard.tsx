@@ -44,6 +44,17 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
 
   const inStock = product.availability === "In Stock"
 
+  function handleAddToCart() {
+    if (!inStock) return
+
+    addItem({
+      id: product.id,
+      productId: product.id,
+      price: product.price,
+      name: product.name,
+    })
+  }
+
   function handleCardMouseEnter() {
     if (!hasColorVariants) setBaseHovered(true)
   }
@@ -55,12 +66,12 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
 
   return (
     <div
-      className="group flex flex-col"
+      className="group flex min-w-0 flex-col"
       onMouseEnter={handleCardMouseEnter}
       onMouseLeave={handleCardMouseLeave}
     >
       {/* Image area */}
-      <div className="product-card-wrap relative overflow-hidden rounded-xl bg-[#F2F2F2]">
+      <div className="product-card-wrap relative overflow-hidden rounded-xl border border-[#E8ECF4] bg-[#F7F8FC]">
         <Link href={`/shop/${product.id}`} className="block aspect-square">
           {hasImages ? (
             <CldImage
@@ -68,8 +79,8 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
               src={activeImage?.publicId ?? ""}
               alt={activeImage?.alt || product.name}
               fill
-              sizes="(min-width: 1024px) 25vw, 50vw"
-              className="object-contain p-5 transition-all duration-300 group-hover:scale-105"
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+              className="object-contain p-4 transition-all duration-300 group-hover:scale-105 sm:p-5"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-[#CCCCCC]">
@@ -98,7 +109,8 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
         {/* Action icons overlay */}
         <div className="product-actions-overlay">
           <button
-            onClick={() => addItem(product.id)}
+            onClick={handleAddToCart}
+            disabled={!inStock}
             aria-label={`Add ${product.name} to inquiry cart`}
             className="product-action-btn"
             title="Add to Inquiry Cart"
@@ -117,7 +129,7 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
       </div>
 
       {/* Info area */}
-      <div className="mt-3 space-y-1 px-0.5">
+      <div className="mt-3 min-w-0 space-y-1 px-0.5">
         {product.brand && (
           <p className="text-[10px] font-semibold uppercase tracking-widest text-[#AAAAAA]">
             {product.brand}
@@ -129,7 +141,7 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
         >
           {product.name}
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span className="text-sm font-semibold text-[#111111]">
             {formatPrice(product.price)}
           </span>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { CldImage } from "next-cloudinary"
 import type { Banner } from "@/lib/firebase/banners"
@@ -32,19 +32,19 @@ export function HeroSlider({ banners }: Props) {
   const pointerStartY = useRef<number | null>(null)
   const isDragging = useRef(false)
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
     setCurrent((c) => (c + 1) % slides.length)
-  }
+  }, [slides.length])
 
-  const goPrev = () => {
+  const goPrev = useCallback(() => {
     setCurrent((c) => (c - 1 + slides.length) % slides.length)
-  }
+  }, [slides.length])
 
   useEffect(() => {
     if (paused || slides.length < 2) return
     intervalRef.current = setInterval(goNext, 4000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
-  }, [paused, slides.length, current])
+  }, [paused, slides.length, goNext])
 
   const slide = slides[current]
 
@@ -92,7 +92,7 @@ export function HeroSlider({ banners }: Props) {
 
   return (
     <div
-      className="relative h-[92vw] min-h-[560px] max-h-[820px] w-full touch-pan-y overflow-hidden bg-[#0A0F1E]"
+      className="relative h-[min(86vh,720px)] min-h-[430px] w-full touch-pan-y overflow-hidden bg-[#0A0F1E] sm:min-h-[520px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onPointerDown={handlePointerDown}
@@ -133,16 +133,16 @@ export function HeroSlider({ banners }: Props) {
       {(slide.headline || slide.subheadline || slide.ctaLabel) && (
         <div className="absolute inset-0 flex items-center">
           <div className="container-page">
-            <div key={`copy-${current}`} className="max-w-xl space-y-5 animate-slide-up">
+            <div key={`copy-${current}`} className="max-w-[36rem] space-y-4 animate-slide-up sm:space-y-5">
 
               {/* Eyebrow */}
-              <p className="text-[11px] font-medium tracking-[0.28em] text-blue-400 uppercase">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-400 sm:text-[11px] sm:tracking-[0.28em]">
                 MS Electronics · Karachi
               </p>
 
               {/* Headline */}
               {slide.headline && (
-                <h2 className="text-[2.6rem] font-bold leading-[1.06] tracking-tight text-white md:text-5xl lg:text-[3.5rem]">
+                <h2 className="text-[clamp(2.1rem,10vw,3.4rem)] font-bold leading-[1.06] tracking-tight text-white md:text-5xl lg:text-[3.5rem]">
                   {slide.headline}
                 </h2>
               )}
@@ -156,10 +156,10 @@ export function HeroSlider({ banners }: Props) {
 
               {/* CTAs */}
               {slide.ctaLabel && slide.ctaHref && (
-                <div className="flex items-center gap-5 pt-1">
+                <div className="flex flex-wrap items-center gap-3 pt-1 sm:gap-5">
                   <Link
                     href={slide.ctaHref}
-                    className="inline-flex items-center rounded-lg bg-white px-7 py-3.5 text-sm font-semibold text-[#0A0F1E] transition-all duration-200 hover:bg-white/90 active:scale-[0.98]"
+                    className="inline-flex items-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-[#0A0F1E] transition-all duration-200 hover:bg-white/90 active:scale-[0.98] sm:px-7 sm:py-3.5"
                   >
                     {slide.ctaLabel}
                   </Link>

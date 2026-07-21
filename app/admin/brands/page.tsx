@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { Pencil, Trash2, Plus, Check, X, Star } from "lucide-react"
 import { CldUploadWidget } from "next-cloudinary"
 import { AdminShell } from "@/components/admin/AdminShell"
@@ -40,21 +41,33 @@ function BrandRow({
     String(brand.displayOrder ?? 0)
   )
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
 
   async function save() {
+    if (!name.trim() || !slug.trim()) {
+      setError("Name and slug are required.")
+      return
+    }
+
     setSaving(true)
+    setError("")
 
-    await onSave(brand.id, {
-      name,
-      slug,
-      logoUrl,
-      logoPublicId,
-      featured,
-      displayOrder: Number(displayOrder),
-    })
+    try {
+      await onSave(brand.id, {
+        name: name.trim(),
+        slug: slug.trim(),
+        logoUrl,
+        logoPublicId,
+        featured,
+        displayOrder: Number(displayOrder) || 0,
+      })
 
-    setSaving(false)
-    setEditing(false)
+      setEditing(false)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to save brand.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   function cancel() {
@@ -90,9 +103,11 @@ function BrandRow({
           <div className="space-y-2">
             {logoUrl ? (
               <div className="flex items-center gap-3">
-                <img
+                <Image
                   src={logoUrl}
                   alt=""
+                  width={48}
+                  height={48}
                   className="h-12 w-12 rounded border object-contain bg-white"
                 />
                 <button
@@ -174,6 +189,9 @@ function BrandRow({
               <X size={15} />
             </Button>
           </div>
+          {error ? (
+            <p className="mt-xs text-xs text-red-500">{error}</p>
+          ) : null}
         </td>
       </tr>
     )
@@ -187,9 +205,11 @@ function BrandRow({
 
       <td className="p-md">
         {brand.logoUrl ? (
-          <img
+          <Image
             src={brand.logoUrl}
             alt={brand.name}
+            width={40}
+            height={40}
             className="h-10 w-10 rounded border object-contain bg-white"
           />
         ) : (
@@ -272,23 +292,28 @@ function AddBrandRow({
     setSaving(true)
     setError("")
 
-    await onAdd({
-      name,
-      slug,
-      logoUrl,
-      logoPublicId,
-      featured,
-      displayOrder: Number(displayOrder) || 0,
-    })
+    try {
+      await onAdd({
+        name: name.trim(),
+        slug: slug.trim(),
+        logoUrl,
+        logoPublicId,
+        featured,
+        displayOrder: Number(displayOrder) || 0,
+      })
 
-    setName("")
-    setSlug("")
-    setLogoUrl("")
-    setLogoPublicId("")
-    setFeatured(false)
-    setDisplayOrder("")
-    setSaving(false)
-    setOpen(false)
+      setName("")
+      setSlug("")
+      setLogoUrl("")
+      setLogoPublicId("")
+      setFeatured(false)
+      setDisplayOrder("")
+      setOpen(false)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to add brand.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!open) {
@@ -331,9 +356,11 @@ function AddBrandRow({
         <div className="space-y-2">
           {logoUrl ? (
             <div className="flex items-center gap-3">
-              <img
+              <Image
                 src={logoUrl}
                 alt=""
+                width={48}
+                height={48}
                 className="h-12 w-12 rounded border object-contain bg-white"
               />
 
@@ -449,10 +476,17 @@ export default function AdminBrandsPage() {
   const [status, setStatus] = useState("")
 
   useEffect(() => {
-    fetchBrandsClient().then((data) => {
-      setBrands(data)
-      setLoading(false)
-    })
+    fetchBrandsClient()
+      .then((data) => {
+        setBrands(data)
+      })
+      .catch((error) => {
+        setStatus(error instanceof Error ? error.message : "Unable to load brands.")
+        setBrands([])
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   async function handleAdd(input: BrandInput) {
@@ -469,9 +503,9 @@ export default function AdminBrandsPage() {
 
       setStatus("Brand added.")
     } catch (e) {
-      setStatus(
-        e instanceof Error ? e.message : "Error adding brand."
-      )
+      const message = e instanceof Error ? e.message : "Error adding brand."
+      setStatus(message)
+      throw new Error(message)
     }
   }
 
@@ -492,9 +526,9 @@ export default function AdminBrandsPage() {
 
       setStatus("Saved.")
     } catch (e) {
-      setStatus(
-        e instanceof Error ? e.message : "Error saving brand."
-      )
+      const message = e instanceof Error ? e.message : "Error saving brand."
+      setStatus(message)
+      throw new Error(message)
     }
   }
 
@@ -504,7 +538,7 @@ export default function AdminBrandsPage() {
   ) {
     if (
       !confirm(
-        `Delete brand "${name}"? This won't delete its products.`
+        `Delete brand "${name}"? Products must be reassigned or deleted first.`
       )
     ) {
       return

@@ -128,5 +128,9 @@ export type SiteSettings = {
 
 export type CartItem = {
   id: string
+  productId?: string
   quantity: number
+  variantLabel?: string
+  price?: number
+  name?: string
 }

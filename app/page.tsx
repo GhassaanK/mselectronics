@@ -6,6 +6,7 @@ import {
   Zap,
 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { HeroSlider } from "@/components/layout/HeroSlider"
 import { SocialDrawer } from "@/components/layout/SocialDrawer"
 import { CategoryTabProducts } from "@/components/shop/CategoryTabProducts"
@@ -117,7 +118,7 @@ export default async function HomePage() {
         <div className="container-page">
 
           <Reveal>
-            <div className="mb-10 flex items-end justify-between">
+            <div className="responsive-section-head mb-8 sm:mb-10">
               <div className="space-y-2">
                 <span className="eyebrow">
                   <span className="h-px w-6 bg-blue-600" />
@@ -137,8 +138,8 @@ export default async function HomePage() {
             </div>
           </Reveal>
 
-          <StaggerParent className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-4">
-            {categories.slice(0, 8).map((category: Category, i) => {
+          <StaggerParent className="grid grid-cols-[repeat(auto-fit,minmax(min(170px,100%),1fr))] gap-4 md:grid-cols-4">
+            {categories.slice(0, 8).map((category: Category) => {
               return (
                 <StaggerChild key={category.id}>
                   <Link
@@ -152,9 +153,11 @@ export default async function HomePage() {
                   >
                     <div className="relative aspect-[4/3] overflow-hidden bg-[#F7F8FC]">
                       {category.imageUrl ? (
-                        <img
+                        <Image
                           src={category.imageUrl}
                           alt={category.name}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 25vw, 50vw"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -206,9 +209,11 @@ export default async function HomePage() {
                   className="flex h-20 w-44 shrink-0 items-center justify-center rounded-xl border border-transparent bg-white px-6 transition-all duration-300 hover:border-[#E8ECF4]"
                 >
                   {brand.logoUrl ? (
-                    <img
+                    <Image
                       src={brand.logoUrl}
                       alt={brand.name}
+                      width={176}
+                      height={48}
                       className="h-12 w-auto object-contain opacity-70 transition-opacity duration-300 hover:opacity-100"
                     />
                   ) : (
@@ -232,7 +237,7 @@ export default async function HomePage() {
       <section className="bg-white section-py">
         <div className="container-page">
           <Reveal>
-            <div className="mb-10 flex items-end justify-between">
+            <div className="responsive-section-head mb-8 sm:mb-10">
               <div className="space-y-2">
                 <span className="eyebrow">
                   <span className="h-px w-6 bg-blue-600" />
@@ -258,18 +263,8 @@ export default async function HomePage() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           6. MID-PAGE BANNER — dark, full-bleed
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="relative overflow-hidden bg-[#0A0F1E] py-20">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-40 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(28,78,216,0.22) 0%, transparent 70%)" }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-20 bottom-0 h-[300px] w-[300px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(28,78,216,0.12) 0%, transparent 70%)" }}
-        />
-        <div className="container-page relative flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
+      <section className="relative overflow-hidden bg-[#0A0F1E] py-12 sm:py-16 lg:py-20">
+        <div className="container-page relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <div className="max-w-xl space-y-3">
             <span className="eyebrow text-blue-400">
               <span className="h-px w-6 bg-blue-500" />

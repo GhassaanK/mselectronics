@@ -85,10 +85,10 @@ export function ShopFilters({ products, categories, brands }: { products: Serial
   )
 
   return (
-    <div className="grid gap-xl lg:grid-cols-[260px_1fr]">
-      <aside className="hidden rounded-lg bg-white/80 dark:bg-zinc-900/80 border p-lg lg:block">{filterPanel}</aside>
-      <div className="grid gap-lg">
-        <div className="flex gap-sm">
+    <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
+      <aside className="hidden self-start rounded-lg border border-[#E5E5E5] bg-white p-5 shadow-[0_1px_4px_rgb(0,0,0,0.04)] lg:block">{filterPanel}</aside>
+      <div className="grid min-w-0 gap-5">
+        <div className="flex gap-2 sm:gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-md top-1/2 -translate-y-1/2 text-muted" size={18} />
             <Input className="pl-10" value={search} onChange={(event) => setFilter("q", event.target.value)} placeholder="Search appliances, brands, categories" />
@@ -103,13 +103,13 @@ export function ShopFilters({ products, categories, brands }: { products: Serial
             </DialogContent>
           </Dialog>
         </div>
-        <div className="flex items-center justify-between text-sm text-muted">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
           <span>{filtered.length} products found</span>
           {totalPages > 1 && <span>Page {page} of {totalPages}</span>}
         </div>
         <ProductGrid products={paginated} />
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-1 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-1 pt-2">
             <Button
               variant="outline"
               size="icon"

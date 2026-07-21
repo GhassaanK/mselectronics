@@ -18,7 +18,7 @@ export default async function BrandsPage() {
   return (
     <div>
       {/* Hero */}
-      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] pb-10 pt-12">
+      <div className="border-b border-[#E5E5E5] bg-[#F8F8F8] py-10 sm:py-12">
         <div className="container-page">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
             MS Electronics
@@ -36,8 +36,8 @@ export default async function BrandsPage() {
 
       {/* Brands Grid */}
       <div className="bg-white">
-        <div className="container-page py-12">
-          <div className="mb-8 flex items-center justify-between">
+        <div className="container-page py-10 sm:py-12">
+          <div className="responsive-section-head mb-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#AAAAAA]">
                 Trusted Brands
@@ -53,12 +53,12 @@ export default async function BrandsPage() {
             </div>
           </div>
 
-          <StaggerParent className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          <StaggerParent className="grid grid-cols-[repeat(auto-fit,minmax(min(145px,100%),1fr))] gap-4 sm:gap-5 lg:grid-cols-5 xl:grid-cols-6">
             {brands.map((brand) => (
               <StaggerChild key={brand.id}>
                 <Link
                   href={`/shop?brand=${brand.slug}`}
-                  className="group flex h-[150px] flex-col items-center justify-center rounded-2xl border border-[#E8ECF4] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)]"
+                  className="group flex min-h-[140px] flex-col items-center justify-center rounded-2xl border border-[#E8ECF4] bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)] sm:p-5"
                 >
                   {brand.logoUrl ? (
                     <div className="relative mb-3 h-16 w-full">

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import {
@@ -90,14 +91,16 @@ export function NavbarClient({ categories, brands }: Props) {
           scrolled ? "shadow-[0_2px_12px_rgb(0,0,0,0.07)]" : "border-b border-[#E5E5E5]",
         ].join(" ")}
       >
-        <div className="container-page flex h-[68px] items-center justify-between gap-4">
+        <div className="container-page flex h-16 items-center justify-between gap-3 sm:h-[68px] sm:gap-4">
 
           {/* ── Logo ──────────────────────────────────── */}
           <Link href="/" className="flex shrink-0 items-center">
-            <img
+            <Image
               src={brandConfig.logo}
               alt={brandConfig.companyName}
-              className="h-16 w-auto object-contain"
+              width={160}
+              height={64}
+              className="h-11 w-auto object-contain sm:h-14"
             />
           </Link>
 
@@ -173,7 +176,7 @@ export function NavbarClient({ categories, brands }: Props) {
 
             <Link
               href="/cart"
-              className="flex items-center gap-2 rounded border border-[#E5E5E5] px-3.5 py-2 text-sm font-semibold text-[#111111] transition-all hover:bg-[#F8F8F8]"
+              className="flex h-9 items-center gap-2 rounded border border-[#E5E5E5] px-2.5 text-sm font-semibold text-[#111111] transition-all hover:bg-[#F8F8F8] sm:px-3.5"
             >
               <ShoppingBag size={16} />
               <span className="hidden sm:inline">Inquiry</span>
@@ -330,7 +333,7 @@ export function NavbarClient({ categories, brands }: Props) {
       {/* ── Mobile drawer ───────────────────────────────── */}
       <div
         className={[
-          "fixed inset-y-0 right-0 z-50 flex w-[300px] flex-col bg-white transition-transform duration-300 xl:hidden",
+          "fixed inset-y-0 right-0 z-50 flex w-[min(340px,calc(100vw-2rem))] flex-col bg-white transition-transform duration-300 xl:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full",
         ].join(" ")}
       >

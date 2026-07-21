@@ -6,7 +6,7 @@ import type { CartItem } from "@/types"
 type CartContextValue = {
   items: CartItem[]
   count: number
-  addItem: (id: string) => void
+  addItem: (item: string | Omit<CartItem, "quantity">) => void
   updateQuantity: (id: string, quantity: number) => void
   removeItem: (id: string) => void
   clearCart: () => void
@@ -20,8 +20,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(storageKey)
-    if (stored) setItems(JSON.parse(stored) as CartItem[])
+    try {
+      const stored = window.localStorage.getItem(storageKey)
+      if (!stored) return
+
+      const parsed = JSON.parse(stored)
+      if (!Array.isArray(parsed)) return
+
+      setItems(
+        parsed
+          .filter((item): item is CartItem =>
+            item &&
+            typeof item.id === "string" &&
+            typeof item.quantity === "number"
+          )
+          .map((item) => ({
+            ...item,
+            quantity: Math.max(1, Math.min(10, Math.floor(item.quantity))),
+          }))
+      )
+    } catch {
+      window.localStorage.removeItem(storageKey)
+    }
   }, [])
 
   useEffect(() => {
@@ -31,9 +51,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<CartContextValue>(() => ({
     items,
     count: items.reduce((total, item) => total + item.quantity, 0),
-    addItem: (id) => setItems((current) => {
+    addItem: (input) => setItems((current) => {
+      const nextItem = typeof input === "string" ? { id: input } : input
+      const id = nextItem.id
       const existing = current.find((item) => item.id === id)
-      return existing ? current.map((item) => item.id === id ? { ...item, quantity: item.quantity + 1 } : item) : [...current, { id, quantity: 1 }]
+      return existing
+        ? current.map((item) => item.id === id ? { ...item, quantity: Math.min(10, item.quantity + 1) } : item)
+        : [...current, { ...nextItem, quantity: 1 }]
     }),
     updateQuantity: (id, quantity) => setItems((current) => current.map((item) => item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item)),
     removeItem: (id) => setItems((current) => current.filter((item) => item.id !== id)),

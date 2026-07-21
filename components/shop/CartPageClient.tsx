@@ -16,20 +16,26 @@ const MAX_QUANTITY = 10
 export function CartPageClient({ products, whatsappNumber }: { products: SerializableProduct[]; whatsappNumber: string }) {
   const { items, updateQuantity, removeItem, clearCart } = useCart()
   const selected = items
-    .map((item) => ({ item, product: products.find((product) => product.id === item.id) }))
+    .map((item) => ({ item, product: products.find((product) => product.id === (item.productId ?? item.id)) }))
     .filter((entry): entry is { item: typeof items[number]; product: SerializableProduct } => Boolean(entry.product))
 
   const expandedProducts = selected.flatMap(({ item, product }) =>
-    Array.from({ length: Math.min(item.quantity, MAX_QUANTITY) }, () => product)
+    Array.from({ length: Math.min(item.quantity, MAX_QUANTITY) }, () => ({
+      ...product,
+      name: item.variantLabel ? `${product.name} (${item.variantLabel})` : product.name,
+      price: item.price ?? product.price,
+    }))
   )
-  const total = selected.reduce((sum, entry) => sum + entry.product.price * entry.item.quantity, 0)
+  const total = selected.reduce((sum, entry) => sum + (entry.item.price ?? entry.product.price) * entry.item.quantity, 0)
 
-  function submitInquiry() {
-    const productIds = selected.map((entry) => entry.product.id)
-    void Promise.race([
-      logInquiry(productIds, "cart"),
-      new Promise((resolve) => setTimeout(resolve, 350))
-    ])
+  async function submitInquiry() {
+    const productIds = selected.map((entry) => entry.item.productId ?? entry.product.id)
+    try {
+      await logInquiry(productIds, "cart")
+    } catch {
+      // The WhatsApp handoff should still work if analytics logging fails.
+    }
+
     clearCart()
     window.localStorage.removeItem(cartStorageKey)
     window.location.href = buildWhatsAppUrl(expandedProducts, whatsappNumber)
@@ -53,16 +59,18 @@ export function CartPageClient({ products, whatsappNumber }: { products: Seriali
       <div className="grid gap-xl lg:grid-cols-[1fr_360px]">
         <div className="grid gap-md">
           {selected.map(({ item, product }) => (
-            <Card key={product.id} className="flex flex-col gap-md p-md sm:flex-row sm:items-center sm:justify-between">
+            <Card key={item.id} className="flex flex-col gap-md p-md sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="font-semibold">{product.name}</p>
-                <p className="text-sm text-muted">{product.brand} - {formatPrice(product.price)}</p>
+                <p className="text-sm text-muted">
+                  {product.brand}{item.variantLabel ? ` - ${item.variantLabel}` : ""} - {formatPrice(item.price ?? product.price)}
+                </p>
               </div>
               <div className="flex items-center gap-sm">
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => updateQuantity(product.id, item.quantity - 1)}
+                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
                   disabled={item.quantity <= 1}
                   aria-label="Decrease quantity"
                 >
@@ -72,13 +80,13 @@ export function CartPageClient({ products, whatsappNumber }: { products: Seriali
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => updateQuantity(product.id, Math.min(item.quantity + 1, MAX_QUANTITY))}
+                  onClick={() => updateQuantity(item.id, Math.min(item.quantity + 1, MAX_QUANTITY))}
                   disabled={item.quantity >= MAX_QUANTITY}
                   aria-label="Increase quantity"
                 >
                   <Plus size={16} />
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => removeItem(product.id)} aria-label="Remove item"><Trash2 size={16} /></Button>
+                <Button variant="ghost" size="icon" onClick={() => removeItem(item.id)} aria-label="Remove item"><Trash2 size={16} /></Button>
               </div>
             </Card>
           ))}

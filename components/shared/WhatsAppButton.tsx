@@ -14,11 +14,13 @@ export function WhatsAppButton({
   productIds?: string[]
   sourcePage?: string
 }) {
-  function handleClick() {
-    void Promise.race([
-      logInquiry(productIds, sourcePage),
-      new Promise((resolve) => setTimeout(resolve, 250)),
-    ])
+  async function handleClick() {
+    try {
+      await logInquiry(productIds, sourcePage)
+    } catch {
+      // The WhatsApp handoff should still work if analytics logging fails.
+    }
+
     window.location.href = href
   }
 

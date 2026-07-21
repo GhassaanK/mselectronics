@@ -3,6 +3,7 @@
 import {
   addDoc,
   collection,
+  deleteField,
   deleteDoc,
   doc,
   getDoc,
@@ -12,7 +13,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore/lite"
-import { db, firebaseEnabled } from "@/lib/firebase/config"
+import { auth, db, firebaseEnabled } from "@/lib/firebase/config"
 import type {
   ColorVariant,
   ProductAvailability,
@@ -68,18 +69,61 @@ async function recalculateCategoryCount(categoryName: string) {
   )
 }
 
+async function requireAdminUser() {
+  if (!auth?.currentUser) {
+    throw new Error("You must be signed in to manage products.")
+  }
+
+  await auth.currentUser.getIdToken(true)
+}
+
+function stripUndefinedDeep<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map(stripUndefinedDeep) as T
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, fieldValue]) => fieldValue !== undefined)
+        .map(([key, fieldValue]) => [key, stripUndefinedDeep(fieldValue)])
+    ) as T
+  }
+
+  return value
+}
+
+function productCreatePayload(input: AdminProductInput) {
+  return {
+    ...stripUndefinedDeep(input),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  }
+}
+
+function productUpdatePayload(input: AdminProductInput) {
+  const cleanInput = stripUndefinedDeep(input)
+
+  return {
+    ...cleanInput,
+    originalPrice: input.originalPrice ?? deleteField(),
+    badge: input.badge ?? deleteField(),
+    colorVariants: input.colorVariants ?? deleteField(),
+    sizeVariants: input.sizeVariants ?? deleteField(),
+    updatedAt: serverTimestamp(),
+  }
+}
+
 export async function createProduct(input: AdminProductInput) {
+  await requireAdminUser()
+
   if (!firebaseEnabled || !db) {
     throw new Error("Firebase is not configured.")
   }
 
   const ref = await addDoc(
     collection(db, "products"),
-    {
-      ...input,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    }
+    productCreatePayload(input)
   )
 
   await recalculateCategoryCount(input.category)
@@ -91,6 +135,8 @@ export async function updateProduct(
   id: string,
   input: AdminProductInput
 ) {
+  await requireAdminUser()
+
   if (!firebaseEnabled || !db) {
     throw new Error("Firebase is not configured.")
   }
@@ -106,10 +152,7 @@ export async function updateProduct(
 
   await setDoc(
     doc(db, "products", id),
-    {
-      ...input,
-      updatedAt: serverTimestamp(),
-    },
+    productUpdatePayload(input),
     { merge: true }
   )
 
@@ -124,6 +167,8 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(id: string) {
+  await requireAdminUser()
+
   if (!firebaseEnabled || !db) {
     throw new Error("Firebase is not configured.")
   }
