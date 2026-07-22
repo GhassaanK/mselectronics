@@ -166,13 +166,18 @@ export const sampleProducts: Product[] = [
 ]
 
 export const sampleTestimonials: Testimonial[] = [
-  { id: "1", name: "Adeel Khan", city: "Lahore", rating: 5, text: "Clear guidance, original products, and quick WhatsApp response.", createdAt: now },
-  { id: "2", name: "Sana Iqbal", city: "Karachi", rating: 5, text: "They helped us compare AC options without pressure.", createdAt: now },
-  { id: "3", name: "Hassan Raza", city: "Islamabad", rating: 5, text: "Premium experience and reliable after-sale support.", createdAt: now }
+  { id: "akram-shams", name: "Akram Shams", city: "Karachi", rating: 5, text: "AC ka model samajh nahi aa raha tha, unhon ne simple words main bata diya ke room ke liye konsa theek hai. delivery bhi time pe hogai", createdAt: now },
+  { id: "bilal-ahmed", name: "Bilal Ahmed", city: "Karachi", rating: 5, text: "Main ne washing machine li thi, price bhi market jaisa tha aur warranty card proper mila. WhatsApp pe reply thora late aya but kaam sahi hogaya", createdAt: now },
+  { id: "shaheen-arshad", name: "Shaheen Arshad", city: "Karachi", rating: 5, text: "Fridge ghar pe check karwaya phir payment ki. mujhe ye acha laga ke jaldi jaldi force nahi kiya, araam se options bata diye", createdAt: now },
+  { id: "ghassaan-saif-ullah", name: "Ghassaan Saif Ullah", city: "Karachi", rating: 5, text: "Product same wohi nikla jo picture main tha, koi change ya excuse nahi. installation wale bhi next day aa gaye thay so overall good experience", createdAt: now },
+  { id: "hussain-iqbal", name: "Hussain Iqbal", city: "Karachi", rating: 5, text: "Mujhe sirf budget bataya tha aur unhon ne 2 3 options bhej diye. zyada sales wali baat nahi ki, jo practical tha woh suggest kar diya", createdAt: now },
+  { id: "syed-zain-ali", name: "Syed Zain Ali", city: "Karachi", rating: 5, text: "Haier AC liya tha, box sealed tha aur bill bhi mil gaya. price confirm karne ke baad koi hidden charges nahi niklay", createdAt: now },
+  { id: "naveen-qureshi", name: "Naveen Qureshi", city: "Karachi", rating: 5, text: "Online order karte hue doubt hota hai but inka response normal aur clear tha. machine receive hui to condition clean thi, abhi tak working fine", createdAt: now },
+  { id: "asma-malik", name: "Asma Malik", city: "Karachi", rating: 5, text: "Mere parents ke liye fridge chahiye tha, unhon ne size aur bijli wali detail samjha di. delivery boy ne old fridge side pe rakhne main bhi help kar di", createdAt: now }
 ]
 
 export const sampleSettings: SiteSettings = {
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923116771224",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923122275812",
   heroHeadline: "Premium appliances with expert buying guidance.",
   heroSubheadline: "Browse leading brands, compare essentials, and send a WhatsApp inquiry for availability, warranty, delivery, and installment options.",
   heroImage: { publicId: "samples/ecommerce/analog-classic", alt: "Premium home appliance display" },
@@ -180,6 +185,6 @@ export const sampleSettings: SiteSettings = {
   installmentDescription: "Ask our team about available installment options and product-specific eligibility before you buy.",
   companyName: "MS Electronics",
   companyAddress: "Shop 01, Next to Bank Alfalah, Main Chorangi, Landhi 06, Karachi",
-  companyPhone: "+92 311 6771224",
+  companyPhone: "+92 312 2275812",
   socialLinks: {}
 }

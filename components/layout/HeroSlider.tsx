@@ -92,7 +92,7 @@ export function HeroSlider({ banners }: Props) {
 
   return (
     <div
-      className="relative h-[min(86vh,720px)] min-h-[430px] w-full touch-pan-y overflow-hidden bg-[#0A0F1E] sm:min-h-[520px]"
+      className="relative h-[min(78vh,680px)] min-h-[430px] w-full touch-pan-y overflow-hidden bg-[#0A0F1E] sm:min-h-[500px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onPointerDown={handlePointerDown}
@@ -125,7 +125,10 @@ export function HeroSlider({ banners }: Props) {
 
         {/* Stronger gradient so text reads clearly */}
         {(slide.imagePublicId || slide.imageUrl) && (
-          <div className="absolute inset-0 bg-gradient-to-r from-[#060B18]/95 via-[#060B18]/65 to-[#060B18]/15" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#060B18]/95 via-[#060B18]/62 to-[#060B18]/10" />
+        )}
+        {(slide.imagePublicId || slide.imageUrl) && (
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#060B18]/35 to-transparent" />
         )}
       </div>
 
@@ -133,7 +136,7 @@ export function HeroSlider({ banners }: Props) {
       {(slide.headline || slide.subheadline || slide.ctaLabel) && (
         <div className="absolute inset-0 flex items-center">
           <div className="container-page">
-            <div key={`copy-${current}`} className="max-w-[36rem] space-y-4 animate-slide-up sm:space-y-5">
+            <div key={`copy-${current}`} className="max-w-[38rem] space-y-4 animate-slide-up sm:space-y-5">
 
               {/* Eyebrow */}
               <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-400 sm:text-[11px] sm:tracking-[0.28em]">
@@ -142,7 +145,7 @@ export function HeroSlider({ banners }: Props) {
 
               {/* Headline */}
               {slide.headline && (
-                <h2 className="text-[clamp(2.1rem,10vw,3.4rem)] font-bold leading-[1.06] tracking-tight text-white md:text-5xl lg:text-[3.5rem]">
+                <h2 className="text-[clamp(2.05rem,9vw,3.4rem)] font-bold leading-[1.06] text-white md:text-5xl lg:text-[3.45rem]">
                   {slide.headline}
                 </h2>
               )}
@@ -159,7 +162,7 @@ export function HeroSlider({ banners }: Props) {
                 <div className="flex flex-wrap items-center gap-3 pt-1 sm:gap-5">
                   <Link
                     href={slide.ctaHref}
-                    className="inline-flex items-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-[#0A0F1E] transition-all duration-200 hover:bg-white/90 active:scale-[0.98] sm:px-7 sm:py-3.5"
+                  className="inline-flex items-center rounded-md bg-white px-5 py-3 text-sm font-semibold text-[#0A0F1E] shadow-[0_14px_32px_rgb(0,0,0,0.18)] transition-all duration-200 hover:bg-white/90 active:scale-[0.98] sm:px-7 sm:py-3.5"
                   >
                     {slide.ctaLabel}
                   </Link>

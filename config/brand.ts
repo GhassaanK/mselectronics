@@ -2,7 +2,7 @@ export const brandConfig = {
   companyName: "MS Electronics",
   companyDescription: "Premium appliances, trusted guidance, and WhatsApp-first inquiries for homes across Pakistan.",
   logo: "/logo.png",
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923116771224",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923122275812",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://mselectroplace.com",
   socialLinks: {
     facebook: "https://facebook.com/mselectroplace",
@@ -11,7 +11,7 @@ export const brandConfig = {
   },
   contactInfo: {
     address: "Shop 01, Next to Bank Alfalah, Main Chorangi, Landhi 06, Karachi",
-    phone: "+92 311 6771224",
+    phone: "+92 312 2275812",
     email: "info@mselectroplace.com"
   },
   brandColors: {

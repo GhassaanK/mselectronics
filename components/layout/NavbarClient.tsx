@@ -87,8 +87,8 @@ export function NavbarClient({ categories, brands }: Props) {
       <header
         ref={menuRef}
         className={[
-          "sticky top-0 z-50 bg-white transition-shadow duration-200",
-          scrolled ? "shadow-[0_2px_12px_rgb(0,0,0,0.07)]" : "border-b border-[#E5E5E5]",
+          "sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur transition-shadow duration-200",
+          scrolled ? "shadow-[0_10px_28px_rgb(15,23,42,0.08)]" : "",
         ].join(" ")}
       >
         <div className="container-page flex h-16 items-center justify-between gap-3 sm:h-[68px] sm:gap-4">
@@ -116,7 +116,7 @@ export function NavbarClient({ categories, brands }: Props) {
               <button
                 className={[
                   "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors duration-150",
-                  openMenu === "shop" ? "text-[#111111]" : "text-[#525252] hover:text-[#111111]",
+                  openMenu === "shop" ? "text-blue-700" : "text-[#525252] hover:text-[#111111]",
                 ].join(" ")}
               >
                 Shop
@@ -139,7 +139,7 @@ export function NavbarClient({ categories, brands }: Props) {
               <button
                 className={[
                   "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors duration-150",
-                  openMenu === "brands" ? "text-[#111111]" : "text-[#525252] hover:text-[#111111]",
+                  openMenu === "brands" ? "text-blue-700" : "text-[#525252] hover:text-[#111111]",
                 ].join(" ")}
               >
                 Brands
@@ -169,14 +169,14 @@ export function NavbarClient({ categories, brands }: Props) {
             <Link
               href="/shop"
               aria-label="Search products"
-              className="flex h-9 w-9 items-center justify-center rounded text-[#525252] transition-colors hover:bg-[#F2F2F2] hover:text-[#111111]"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-[#525252] transition-colors hover:bg-[#F2F2F2] hover:text-[#111111]"
             >
               <Search size={17} />
             </Link>
 
             <Link
               href="/cart"
-              className="flex h-9 items-center gap-2 rounded border border-[#E5E5E5] px-2.5 text-sm font-semibold text-[#111111] transition-all hover:bg-[#F8F8F8] sm:px-3.5"
+              className="flex h-9 items-center gap-2 rounded-md border border-[#E5E7EB] bg-white px-2.5 text-sm font-semibold text-[#111111] shadow-sm transition-all hover:border-blue-200 hover:bg-[#F8FAFC] sm:px-3.5"
             >
               <ShoppingBag size={16} />
               <span className="hidden sm:inline">Inquiry</span>
@@ -190,7 +190,7 @@ export function NavbarClient({ categories, brands }: Props) {
             <button
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
-              className="flex h-9 w-9 items-center justify-center rounded text-[#525252] transition-colors hover:bg-[#F2F2F2] xl:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-[#525252] transition-colors hover:bg-[#F2F2F2] xl:hidden"
             >
               <Menu size={20} />
             </button>
@@ -202,7 +202,7 @@ export function NavbarClient({ categories, brands }: Props) {
           <div
             onMouseEnter={() => handleMenuEnter(openMenu)}
             onMouseLeave={handleMenuLeave}
-            className="absolute left-0 right-0 top-full z-40 border-t border-[#E5E5E5] bg-white shadow-[0_16px_40px_rgb(0,0,0,0.10)]"
+            className="absolute left-0 right-0 top-full z-40 border-t border-[#E5E7EB] bg-white shadow-[0_22px_50px_rgb(15,23,42,0.12)]"
           >
             <div className="container-page py-8">
 

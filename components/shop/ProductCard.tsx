@@ -65,13 +65,13 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
   }
 
   return (
-    <div
-      className="group flex min-w-0 flex-col"
+    <article
+      className="group flex min-w-0 flex-col rounded-lg border border-[#E5E7EB] bg-white p-2 shadow-[0_1px_2px_rgb(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_18px_38px_rgb(15,23,42,0.10)]"
       onMouseEnter={handleCardMouseEnter}
       onMouseLeave={handleCardMouseLeave}
     >
       {/* Image area */}
-      <div className="product-card-wrap relative overflow-hidden rounded-xl border border-[#E8ECF4] bg-[#F7F8FC]">
+      <div className="product-card-wrap relative overflow-hidden rounded-md bg-gradient-to-b from-[#F8FAFC] to-white">
         <Link href={`/shop/${product.id}`} className="block aspect-square">
           {hasImages ? (
             <CldImage
@@ -96,7 +96,7 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
         {/* Badge */}
         {product.badge && (
           <span className={[
-            "absolute left-3 top-3 z-10 rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white",
+            "absolute left-3 top-3 z-10 rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm",
             product.badge === "Best Seller" ? "bg-[#111111]" :
             product.badge === "On Sale"     ? "bg-[#DC2626]" :
             product.badge === "New Arrival" ? "bg-[#16A34A]" :
@@ -129,36 +129,40 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
       </div>
 
       {/* Info area */}
-      <div className="mt-3 min-w-0 space-y-1 px-0.5">
-        {product.brand && (
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-[#AAAAAA]">
-            {product.brand}
-          </p>
-        )}
+      <div className="flex flex-1 min-w-0 flex-col gap-2 px-1.5 pb-2 pt-3">
+        <div className="flex min-h-5 items-center justify-between gap-2">
+          {product.brand ? (
+            <p className="truncate text-[10px] font-bold uppercase tracking-widest text-blue-600">
+              {product.brand}
+            </p>
+          ) : <span />}
+          <span className={[
+            "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold",
+            inStock
+              ? "bg-emerald-50 text-emerald-700"
+              : "bg-slate-100 text-slate-500",
+          ].join(" ")}>
+            {inStock ? "In Stock" : product.availability}
+          </span>
+        </div>
+
         <Link
           href={`/shop/${product.id}`}
-          className="line-clamp-2 text-sm font-medium leading-snug text-[#111111] transition-colors hover:text-[#525252]"
+          className="line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug text-[#111111] transition-colors hover:text-blue-700"
         >
           {product.name}
         </Link>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="text-sm font-semibold text-[#111111]">
+
+        <div className="mt-auto flex flex-wrap items-end gap-x-2 gap-y-1 pt-1">
+          <span className="text-[0.95rem] font-bold leading-none text-[#0A0F1E]">
             {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
-            <span className="text-xs text-[#AAAAAA] line-through">
+            <span className="text-xs leading-none text-[#94A3B8] line-through">
               {formatPrice(product.originalPrice)}
             </span>
           )}
         </div>
-        <span className={[
-          "inline-block rounded px-2 py-0.5 text-[10px] font-medium",
-          inStock
-            ? "bg-[#F0FDF4] text-[#16A34A]"
-            : "bg-[#F8F8F8] text-[#525252]",
-        ].join(" ")}>
-          {inStock ? "In Stock" : product.availability}
-        </span>
 
         {/* Color swatches — always visible when color variants exist */}
         {hasColorVariants && (
@@ -179,7 +183,7 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
                   onMouseEnter={() => setHoveredColorId(variant.id)}
                   onMouseLeave={() => setHoveredColorId(null)}
                   className={[
-                    "relative h-4 w-4 rounded-full border transition-all duration-150",
+                    "relative h-4 w-4 rounded-full border shadow-sm transition-all duration-150",
                     isPinned
                       ? "border-[#111111] scale-110"
                       : "border-[#E5E5E5] hover:border-[#AAAAAA] hover:scale-110",
@@ -191,6 +195,6 @@ export function ProductCard({ product }: { product: SerializableProduct }) {
           </div>
         )}
       </div>
-    </div>
+    </article>
   )
 }

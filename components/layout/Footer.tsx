@@ -16,10 +16,10 @@ const company = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-100 bg-[#F5F5F5] text-[#111111]">
+    <footer className="border-t border-[#E5E7EB] bg-[#F8FAFC] text-[#111111]">
 
       {/* ── Main grid ───────────────────────────────────── */}
-      <div className="container-page grid gap-12 py-16 md:grid-cols-[2fr_1fr_1fr_1.4fr]">
+      <div className="container-page grid gap-10 py-14 md:grid-cols-[2fr_1fr_1fr_1.4fr] lg:gap-12">
 
         {/* Brand column */}
         <div className="space-y-5">
@@ -36,7 +36,7 @@ export function Footer() {
               {brandConfig.companyName}
             </span>
           )}
-          <div className="space-y-1.5 text-sm text-[#525252]">
+          <div className="space-y-1.5 text-sm leading-6 text-[#525252]">
             <p><span className="font-semibold text-[#111111]">Address:</span> {brandConfig.contactInfo.address}</p>
             <p>
               <span className="font-semibold text-[#111111]">Email: </span>
@@ -63,7 +63,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#CCCCCC] text-xs font-bold text-[#525252] transition-all duration-200 hover:border-[#111111] hover:text-[#111111]"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#CBD5E1] bg-white text-xs font-bold text-[#525252] transition-all duration-200 hover:border-blue-300 hover:text-blue-700"
               >
                 {char}
               </Link>
@@ -79,7 +79,7 @@ export function Footer() {
           <ul className="space-y-3">
             {browse.map(({ href, label }) => (
               <li key={href}>
-                <Link href={href} className="text-sm text-[#525252] transition-colors hover:text-[#111111]">
+                <Link href={href} className="text-sm text-[#525252] transition-colors hover:text-blue-700">
                   {label}
                 </Link>
               </li>
@@ -95,7 +95,7 @@ export function Footer() {
           <ul className="space-y-3">
             {company.map(({ href, label }) => (
               <li key={href}>
-                <Link href={href} className="text-sm text-[#525252] transition-colors hover:text-[#111111]">
+                <Link href={href} className="text-sm text-[#525252] transition-colors hover:text-blue-700">
                   {label}
                 </Link>
               </li>
@@ -115,9 +115,9 @@ export function Footer() {
             <input
               type="email"
               placeholder="Enter email address"
-              className="flex-1 rounded-l-lg border border-[#CCCCCC] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#111111]"
+              className="min-w-0 flex-1 rounded-l-md border border-[#CBD5E1] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
             />
-            <button className="rounded-r-lg bg-[#111111] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#262626]">
+            <button className="rounded-r-md bg-[#0A0F1E] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
               Subscribe
             </button>
           </div>

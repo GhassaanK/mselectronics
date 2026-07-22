@@ -2,19 +2,16 @@
 
 import { useMemo, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { Search, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { ChevronLeft, ChevronRight, Search, SlidersHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import { ProductGrid } from "@/components/shop/ProductGrid"
 import type { Brand, Category, ProductAvailability, SerializableProduct } from "@/types"
 
 const PAGE_SIZE = 12
 
-/** Returns the page numbers (and "…" gaps) to render in the pagination bar.
- *  Always shows first, last, current, and one neighbour on each side.
- *  Everything else collapses to an ellipsis string. */
-function getPageRange(current: number, total: number): (number | "…")[] {
+function getPageRange(current: number, total: number): (number | "...")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
 
   const pages = new Set<number>([1, total, current])
@@ -22,17 +19,25 @@ function getPageRange(current: number, total: number): (number | "…")[] {
   if (current < total) pages.add(current + 1)
 
   const sorted = Array.from(pages).sort((a, b) => a - b)
-  const result: (number | "…")[] = []
+  const result: (number | "...")[] = []
 
   for (let i = 0; i < sorted.length; i++) {
-    if (i > 0 && sorted[i] - sorted[i - 1] > 1) result.push("…")
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) result.push("...")
     result.push(sorted[i])
   }
 
   return result
 }
 
-export function ShopFilters({ products, categories, brands }: { products: SerializableProduct[]; categories: Category[]; brands: Brand[] }) {
+export function ShopFilters({
+  products,
+  categories,
+  brands,
+}: {
+  products: SerializableProduct[]
+  categories: Category[]
+  brands: Brand[]
+}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -72,42 +77,63 @@ export function ShopFilters({ products, categories, brands }: { products: Serial
   const pageRange = getPageRange(page, totalPages)
 
   const filterPanel = (
-    <div className="grid gap-md">
+    <div className="grid gap-5">
+      <div>
+        <p className="text-sm font-bold text-[#0A0F1E]">Refine products</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">
+          Use filters together to narrow the catalog quickly.
+        </p>
+      </div>
       <FilterSelect label="Category" value={category} onChange={(value) => setFilter("category", value)} options={categories.map((item) => ({ label: item.name, value: item.slug }))} />
       <FilterSelect label="Brand" value={brand} onChange={(value) => setFilter("brand", value)} options={brands.map((item) => ({ label: item.name, value: item.slug }))} />
       <FilterSelect label="Availability" value={availability} onChange={(value) => setFilter("availability", value)} options={["In Stock", "On Order", "Out of Stock"].map((item) => ({ label: item, value: item }))} />
-      <label className="grid gap-sm text-sm font-semibold">
+      <label className="grid gap-2 text-sm font-semibold text-[#0A0F1E]">
         Max price
-        <Input inputMode="numeric" value={maxPrice} onChange={(event) => setFilter("maxPrice", event.target.value)} placeholder="PKR" />
+        <Input className="h-11 bg-white" inputMode="numeric" value={maxPrice} onChange={(event) => setFilter("maxPrice", event.target.value)} placeholder="PKR" />
       </label>
-      <Button variant="outline" onClick={clearFilters}>Clear filters</Button>
+      <Button variant="outline" className="h-11 justify-center" onClick={clearFilters}>Clear filters</Button>
     </div>
   )
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
-      <aside className="hidden self-start rounded-lg border border-[#E5E5E5] bg-white p-5 shadow-[0_1px_4px_rgb(0,0,0,0.04)] lg:block">{filterPanel}</aside>
+    <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8">
+      <aside className="hidden self-start rounded-lg border border-[#E5E7EB] bg-white p-5 shadow-[0_10px_28px_rgb(15,23,42,0.06)] lg:sticky lg:top-24 lg:block">
+        {filterPanel}
+      </aside>
+
       <div className="grid min-w-0 gap-5">
-        <div className="flex gap-2 sm:gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-md top-1/2 -translate-y-1/2 text-muted" size={18} />
-            <Input className="pl-10" value={search} onChange={(event) => setFilter("q", event.target.value)} placeholder="Search appliances, brands, categories" />
+        <div className="rounded-lg border border-[#E5E7EB] bg-white p-3 shadow-[0_10px_28px_rgb(15,23,42,0.05)]">
+          <div className="flex gap-2 sm:gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <Input
+                className="h-11 border-[#E5E7EB] bg-[#F8FAFC] pl-10 focus:bg-white"
+                value={search}
+                onChange={(event) => setFilter("q", event.target.value)}
+                placeholder="Search appliances, brands, categories"
+              />
+            </div>
+            <Dialog open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="icon" className="h-11 w-11 lg:hidden" aria-label="Filters">
+                  <SlidersHorizontal size={18} />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="lg:hidden">
+                <DialogHeader><DialogTitle>Filters</DialogTitle></DialogHeader>
+                {filterPanel}
+              </DialogContent>
+            </Dialog>
           </div>
-          <Dialog open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="icon" className="lg:hidden" aria-label="Filters"><SlidersHorizontal size={18} /></Button>
-            </DialogTrigger>
-            <DialogContent className="lg:hidden">
-              <DialogHeader><DialogTitle>Filters</DialogTitle></DialogHeader>
-              {filterPanel}
-            </DialogContent>
-          </Dialog>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
+
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-slate-500">
           <span>{filtered.length} products found</span>
           {totalPages > 1 && <span>Page {page} of {totalPages}</span>}
         </div>
+
         <ProductGrid products={paginated} />
+
         {totalPages > 1 && (
           <div className="flex flex-wrap items-center justify-center gap-1 pt-2">
             <Button
@@ -121,13 +147,13 @@ export function ShopFilters({ products, categories, brands }: { products: Serial
             </Button>
 
             {pageRange.map((entry, index) =>
-              entry === "…" ? (
+              entry === "..." ? (
                 <span
                   key={`ellipsis-${index}`}
-                  className="flex h-9 w-9 items-center justify-center text-sm text-[#AAAAAA] select-none"
+                  className="flex h-9 w-9 select-none items-center justify-center text-sm text-[#AAAAAA]"
                   aria-hidden
                 >
-                  …
+                  ...
                 </span>
               ) : (
                 <Button
@@ -159,11 +185,25 @@ export function ShopFilters({ products, categories, brands }: { products: Serial
   )
 }
 
-function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: { label: string; value: string }[] }) {
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string
+  value: string
+  onChange: (value: string) => void
+  options: { label: string; value: string }[]
+}) {
   return (
-    <label className="grid gap-sm text-sm font-semibold">
+    <label className="grid gap-2 text-sm font-semibold text-[#0A0F1E]">
       {label}
-      <select className="h-11 rounded-md border bg-background px-md text-sm" value={value} onChange={(event) => onChange(event.target.value)}>
+      <select
+        className="h-11 rounded-md border border-[#E5E7EB] bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      >
         <option value="">All</option>
         {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
       </select>
